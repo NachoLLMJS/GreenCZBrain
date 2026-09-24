@@ -181,7 +181,7 @@ button{font:inherit;color:inherit}
 html[lang="zh-CN"] body{font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",var(--display)}
 html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",var(--mono)}
 @media (max-width:760px){#languageToggle{left:auto;right:12px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 10px);height:38px;min-width:46px;padding:0 10px}}
-@media (max-height:700px) and (min-width:761px){.intro .row .ghost{display:none}}
+@media (max-height:700px) and (min-width:761px){.intro .row{display:none}.monitor .feed{height:calc(1.55em * 4)}}
 @media (prefers-reduced-motion: reduce){
   .marquee .track{animation:none}
   .btn{transition:none}
@@ -223,7 +223,7 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
 <main class="hud" id="hud">
   <div class="intro" id="intro">
     <h1 data-i18n="heroTitle">赵长鹏的大脑，实时运行中。</h1>
-    <p data-i18n="heroBody">ZBRAIN 将 CZ 公开展现的建设者能量化为一个鲜活的点云大脑。它不断计算、观察市场，并持续构建。</p>
+    <p data-i18n="heroBody">我们汇集并浓缩了 CZ 的公开推文，把他的想法、语气与建设者精神重组成 ZBRAIN 中鲜活的数字人格。</p>
     <div class="row">
       <button class="btn" id="thinkBtn" data-i18n="makeThink">让它思考</button>
       <a class="btn ghost" href="#how" data-nav="how" data-i18n="navHow">工作原理</a>
@@ -342,7 +342,7 @@ const I18N = {
   zh: {
     loaderTitle: "正在上传 ZBRAIN…", navBrain: "大脑", navHow: "工作原理", navAbout: "关于", navToken: "代币",
     mainNavAria: "主导航", soundAria: "声音", soundOn: "声音：开", soundOff: "声音：关", buy: "购买", menu: "菜单",
-    heroTitle: "赵长鹏的大脑，实时运行中。", heroBody: "ZBRAIN 将 CZ 公开展现的建设者能量化为一个鲜活的点云大脑。它不断计算、观察市场，并持续构建。",
+    heroTitle: "赵长鹏的大脑，实时运行中。", heroBody: "我们汇集并浓缩了 CZ 的公开推文，把他的想法、语气与建设者精神重组成 ZBRAIN 中鲜活的数字人格。",
     makeThink: "让它思考", brainMonitor: "大脑监视器", thinking: "思考", cartoonCortex: "卡通皮层", reading: "阅读",
     neuronsScreen: "屏幕神经元", primesFound: "已发现质数", gamesLost: "游戏失败", articlesRead: "已读文章",
     simulationNote: "在你的浏览器中模拟，数学计算是真实的。", changeChannel: "切换频道", hint: "拖动即可旋转。点击大脑让它思考。",
@@ -391,7 +391,7 @@ const I18N = {
   en: {
     loaderTitle: "Uploading ZBRAIN…", navBrain: "Brain", navHow: "How it works", navAbout: "About", navToken: "Token",
     mainNavAria: "Main", soundAria: "Sound", soundOn: "Sound on", soundOff: "Sound off", buy: "Buy", menu: "Menu",
-    heroTitle: "Changpeng Zhao's brain, running live.", heroBody: "ZBRAIN turns CZ’s public builder energy into a living point-cloud brain. It calculates, watches markets and never stops building.",
+    heroTitle: "Changpeng Zhao's brain, running live.", heroBody: "We gathered CZ’s public tweets and rebuilt his ideas, voice and builder mindset as a living persona inside ZBRAIN.",
     makeThink: "Make it think", brainMonitor: "Brain monitor", thinking: "Thinking", cartoonCortex: "Cartoon cortex", reading: "Reading",
     neuronsScreen: "Neurons on screen", primesFound: "Primes found", gamesLost: "Games lost", articlesRead: "Articles read",
     simulationNote: "Simulated in your browser. The math is real.", changeChannel: "Change channel", hint: "Drag to spin him. Click his brain to make him think.",

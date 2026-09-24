@@ -18,7 +18,7 @@ class ZbrainI18nContractTests(unittest.TestCase):
         self.assertIn("切换频道", self.html)
         self.assertIn("大脑监视器", self.html)
 
-    def test_language_toggle_is_fixed_bottom_left_and_starts_as_en(self):
+    def test_language_toggle_is_fixed_and_starts_as_en(self):
         self.assertRegex(
             self.html,
             r'<button[^>]+id="languageToggle"[^>]*>EN</button>',
@@ -39,6 +39,12 @@ class ZbrainI18nContractTests(unittest.TestCase):
             "feed", "canvas",
         ]:
             self.assertRegex(self.html, rf"\b{key}\s*:")
+
+    def test_hero_explains_the_public_tweets_persona_in_both_languages(self):
+        self.assertIn("我们汇集并浓缩了 CZ 的公开推文", self.html)
+        self.assertIn("把他的想法、语气与建设者精神重组成 ZBRAIN 中鲜活的数字人格", self.html)
+        self.assertIn("We gathered CZ’s public tweets", self.html)
+        self.assertIn("a living persona inside ZBRAIN", self.html)
 
     def test_toggle_changes_language_without_reload_and_updates_dynamic_ui(self):
         self.assertIn('let currentLanguage = "zh";', self.html)
