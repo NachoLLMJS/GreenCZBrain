@@ -1,0 +1,1315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZBRAIN — Changpeng Zhao Brain</title>
+<meta name="description" content="ZBRAIN is a playful point-cloud simulation of Changpeng Zhao’s brain, running live in your browser.">
+<meta property="og:title" content="ZBRAIN — Changpeng Zhao Brain">
+<meta property="og:description" content="A playful point-cloud simulation inspired by Changpeng Zhao’s public persona.">
+<meta property="og:image" content="assets/brand/zbrain-logo-master.png?v=1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2B3BE0">
+<link rel="icon" href="assets/brand/zbrain-favicon.ico?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="assets/vendor/fonts/google-fonts.css" rel="stylesheet">
+<style>
+:root{
+  --cobalt:#2B3BE0; --cobalt-tone:#3546EE; --cobalt-deep:#1B26A6; --ink:#0F1670;
+  --gold:#FFD23F; --cream:#FFF3B0; --pink:#FF7EB6; --orange:#FF8A2A; --mint:#3DE08A; --white:#FFFFFF;
+  --display:"Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --nav-h:64px; --marq-h:38px;
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --cobalt:#2836D2; --cobalt-tone:#3141E2; } }
+:root[data-theme="dark"]{ --cobalt:#2836D2; --cobalt-tone:#3141E2; }
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--cobalt);color:var(--white);font-family:var(--display);overflow:hidden;-webkit-font-smoothing:antialiased;font-variation-settings:"opsz" 24}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--white);outline-offset:3px;border-radius:6px}
+
+/* giant tonal wordmark behind the scene */
+.bigtype{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 2vw;pointer-events:none;z-index:0;user-select:none}
+.bigtype span{display:block;font-weight:800;font-variation-settings:"wdth" 75,"opsz" 96;font-size:min(21vw,34vh);line-height:.8;letter-spacing:-.02em;color:var(--cobalt-tone);white-space:nowrap}
+.bigtype span:last-child{align-self:flex-end}
+
+#scene{position:fixed;inset:0;width:100%;height:100%;z-index:1;display:block;touch-action:none;cursor:default}
+#scene.on-brain{cursor:grab}#scene.dragging{cursor:grabbing}#scene.on-screen{cursor:pointer}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;gap:18px;height:calc(var(--nav-h) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 22px 0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:19px;letter-spacing:-.01em;font-variation-settings:"wdth" 80}
+.brand img{width:38px;height:38px;border-radius:50%;border:0;padding:0;background:var(--cobalt);object-fit:cover}
+.links{display:flex;gap:4px;margin-left:auto}
+.links a{text-decoration:none;font-weight:600;font-size:15px;padding:8px 12px;border-radius:999px}
+.links a:hover{background:rgba(255,255,255,.12)}
+.links a[aria-current="page"]{outline:2px dotted var(--cream);outline-offset:-2px}
+.iconbtn{background:none;border:2px dotted rgba(255,243,176,.7);border-radius:999px;height:38px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-weight:600;font-size:14px}
+.iconbtn svg{width:18px;height:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;text-decoration:none;font-weight:700;font-size:15px;height:42px;padding:0 20px;border-radius:999px;background:var(--gold);color:var(--ink);outline:2px dotted var(--ink);outline-offset:-6px;transition:transform .15s ease}
+.btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:3px solid var(--white);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--white);outline:none;border:2px dotted var(--cream)}
+.btn.pink{background:var(--pink)}
+.burger{display:none}
+
+/* hud */
+.hud{position:fixed;inset:0;z-index:3;pointer-events:none}
+.hud > *{pointer-events:auto}
+.intro{position:absolute;left:24px;top:calc(var(--nav-h) + env(safe-area-inset-top,0px) + 18px);width:min(360px,36vw)}
+.intro h1{margin:0 0 10px;font-size:clamp(26px,2.4vw,34px);line-height:1.02;font-weight:800;font-variation-settings:"wdth" 85,"opsz" 60;letter-spacing:-.015em}
+.intro p{margin:0 0 16px;font-size:16px;line-height:1.4;color:var(--cream);max-width:32ch}
+.intro .row{display:flex;gap:10px;flex-wrap:wrap}
+
+.monitor{position:absolute;left:24px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 18px);width:min(360px,36vw);background:rgba(17,26,140,.55);border:2px dotted rgba(255,243,176,.75);border-radius:18px;padding:14px 16px 12px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.monitor h2{margin:0 0 8px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.monitor h2 .dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 3px rgba(61,224,138,.25)}
+.feed{list-style:none;margin:0 0 10px;padding:0;font-family:var(--mono);font-size:12.5px;line-height:1.55;height:calc(1.55em * 6);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.feed li{flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--cream)}
+.feed li .ok{color:var(--mint)} .feed li .bad{color:var(--pink);text-decoration:line-through} .feed li .ctx{color:var(--white);opacity:.8}
+.feed li:last-child{color:var(--white)}
+.meters{display:grid;grid-template-columns:auto 1fr;gap:5px 10px;align-items:center;font-size:13px;margin-bottom:10px}
+.meter{height:10px;background-image:radial-gradient(circle,rgba(255,255,255,.22) 1.6px,transparent 1.8px);background-size:6px 10px;position:relative;border-radius:4px;overflow:hidden}
+.meter i{position:absolute;inset:0 auto 0 0;width:0;background-image:radial-gradient(circle,var(--gold) 2px,transparent 2.3px);background-size:6px 10px;transition:width .8s ease}
+.meter.pink i{background-image:radial-gradient(circle,var(--pink) 2px,transparent 2.3px)}
+.meter.mint i{background-image:radial-gradient(circle,var(--mint) 2px,transparent 2.3px)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:12.5px;color:var(--cream)}
+.stats b{font-family:var(--mono);color:var(--white);font-weight:700}
+.monitor small{display:block;margin-top:8px;font-size:11.5px;opacity:.7}
+
+.nowplaying{position:absolute;right:24px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 18px);display:flex;align-items:center;gap:12px;background:rgba(17,26,140,.55);border:2px dotted rgba(255,243,176,.75);border-radius:999px;padding:6px 6px 6px 16px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);max-width:calc(100vw - 48px)}
+.nowplaying .lbl{font-size:12px;color:var(--cream);line-height:1.1}
+.nowplaying .ttl{font-size:15px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+.nowplaying .btn{height:38px;font-size:14px;padding:0 16px}
+
+.hint{position:absolute;left:50%;top:calc(var(--nav-h) + env(safe-area-inset-top,0px) + 6px);transform:translateX(-50%);font-size:14px;color:var(--cream);white-space:nowrap;transition:opacity .6s;pointer-events:none}
+.hint.gone{opacity:0}
+
+#thoughts{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.thought{position:absolute;left:0;top:0;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);background:var(--cream);padding:5px 10px;border-radius:999px;white-space:nowrap;outline:2px dotted var(--ink);outline-offset:-4px;will-change:transform,opacity}
+.thought.pink{background:var(--pink)}.thought.mint{background:var(--mint)}.thought.gold{background:var(--gold)}
+
+/* marquee */
+.marquee{position:fixed;left:0;right:0;bottom:0;z-index:4;height:calc(var(--marq-h) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:var(--gold);color:var(--ink);overflow:hidden;display:flex;align-items:center;border-top:2px dotted var(--ink)}
+.marquee .track{display:flex;white-space:nowrap;animation:marq 60s linear infinite;font-weight:700;font-size:15px}
+.marquee .track span{padding-right:2.2em}
+.marquee .track i{font-style:normal;color:var(--cobalt);padding:0 .8em}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* pages */
+.page{position:fixed;z-index:5;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));right:16px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 16px);width:min(540px,calc(100vw - 32px));background:var(--cobalt-deep);border:2px dotted var(--cream);border-radius:24px;overflow:auto;overscroll-behavior:contain;transform:translateX(calc(100% + 40px));visibility:hidden}
+.page.open{visibility:visible}
+.page-inner{padding:28px 30px 34px}
+.page .close{position:sticky;top:0;float:right;margin:-8px -10px 0 0}
+.page section{display:none}.page section.active{display:block}
+.page h2{margin:0 0 14px;font-size:clamp(34px,4vw,48px);line-height:.95;font-weight:800;font-variation-settings:"wdth" 78,"opsz" 96;letter-spacing:-.02em;max-width:14ch}
+.page h3{margin:26px 0 8px;font-size:20px;font-weight:700}
+.page p{font-size:16.5px;line-height:1.5;color:var(--cream);max-width:60ch;margin:0 0 14px}
+.page p strong{color:var(--white)}
+.steps{list-style:none;counter-reset:s;margin:18px 0 20px;padding:0}
+.steps li{counter-increment:s;position:relative;padding:0 0 18px 52px;font-size:16px;line-height:1.45;color:var(--cream)}
+.steps li b{display:block;color:var(--white);font-size:17px;margin-bottom:2px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;border:2px dotted var(--gold);display:grid;place-items:center;font-weight:800;color:var(--gold)}
+.does{margin:0 0 18px;padding:0;list-style:none;display:grid;gap:8px}
+.does li{display:flex;gap:10px;align-items:baseline;font-size:16px;color:var(--cream)}
+.does li::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:var(--mint);transform:translateY(1px)}
+.does li:nth-child(2)::before{background:var(--gold)}.does li:nth-child(3)::before{background:var(--pink)}.does li:nth-child(4)::before{background:var(--orange)}.does li:nth-child(5)::before{background:var(--white)}
+.fine{font-size:13.5px !important;opacity:.8}
+.portrait{float:right;width:132px;height:132px;border-radius:50%;margin:0 0 12px 16px;border:2px dotted var(--cream);padding:4px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:16px 0 20px;font-size:16px}
+.facts dt{color:var(--cream)}.facts dd{margin:0;font-weight:700}
+.ca{display:flex;align-items:center;gap:8px;border:2px dotted var(--cream);border-radius:14px;padding:8px 8px 8px 14px;margin:6px 0 8px}
+.ca code{font-family:var(--mono);font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ca .btn{height:36px;font-size:14px;padding:0 14px}
+.page .row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+
+/* preloader */
+.pre{position:fixed;inset:0;z-index:9;background:var(--cobalt);display:grid;place-items:center;padding:24px}
+.pre-box{width:min(420px,100%)}
+.pre h2{margin:0 0 16px;font-size:30px;font-weight:800;font-variation-settings:"wdth" 80;letter-spacing:-.01em}
+.pre ul{list-style:none;padding:0;margin:0 0 18px;font-family:var(--mono);font-size:13.5px;line-height:1.8;color:var(--cream);min-height:9em}
+.pre ul li span{color:var(--mint)}
+.pre-bar{height:14px;background-image:radial-gradient(circle,rgba(255,255,255,.25) 2.4px,transparent 2.7px);background-size:12px 14px;position:relative}
+.pre-bar i{position:absolute;inset:0 auto 0 0;width:0;background-image:radial-gradient(circle,var(--gold) 3px,transparent 3.3px);background-size:12px 14px}
+
+.fallback{position:fixed;inset:0;z-index:1;display:none;place-items:center}
+.fallback img{width:min(60vmin,520px);border-radius:24px}
+.nogl .fallback{display:grid}.nogl #scene{display:none}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (max-width: 900px){
+  .intro,.monitor{width:min(320px,42vw)}
+  .nowplaying .ttl{max-width:180px}
+}
+@media (max-width: 760px){
+  :root{--nav-h:58px}
+  .links{display:none}
+  .burger{display:inline-flex}
+  .nav .buy{display:none}
+  .nav{gap:10px;padding-left:14px;padding-right:14px}
+  .brand{font-size:16px;white-space:nowrap}
+  .brand img{width:32px;height:32px}
+  #soundLbl{display:none}
+  #soundBtn{margin-left:auto;padding:0 10px}
+  .burger{margin-left:0}
+  .links.open{display:flex;position:fixed;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));left:12px;right:12px;flex-direction:column;background:var(--cobalt-deep);border:2px dotted var(--cream);border-radius:18px;padding:10px;gap:2px}
+  .links.open a{font-size:18px;padding:12px 14px}
+  .intro{left:16px;right:16px;width:auto;top:calc(var(--nav-h) + env(safe-area-inset-top,0px) + 4px)}
+  .intro h1{font-size:24px;margin-bottom:4px}
+  .intro p{font-size:14.5px;margin-bottom:0;max-width:none}
+  .intro .row{display:none}
+  .monitor{left:12px;right:12px;width:auto;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 64px);padding:10px 12px;border-radius:14px}
+  .monitor .meters,.monitor .stats,.monitor small{display:none}
+  .feed{height:calc(1.55em * 2);margin:0;font-size:12px}
+  .monitor h2{font-size:13px;margin-bottom:4px}
+  .nowplaying{left:12px;right:12px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 10px);border-radius:16px}
+  .nowplaying .ttl{max-width:none}
+  .nowplaying > div{flex:1;min-width:0}
+  .hint{display:none}
+  .page{left:8px;right:8px;width:auto;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 8px)}
+  .page-inner{padding:22px 20px 28px}
+  .bigtype span{font-size:min(30vw,22vh)}
+}
+@media (prefers-reduced-motion: reduce){
+  .marquee .track{animation:none}
+  .btn{transition:none}
+}
+</style>
+  <link rel="stylesheet" href="editable/overrides.css">
+</head>
+<body>
+
+<div class="pre" id="pre" aria-live="polite">
+  <div class="pre-box">
+    <h2>Uploading ZBRAIN…</h2>
+    <ul id="preList"></ul>
+    <div class="pre-bar" aria-hidden="true"><i id="preBar"></i></div>
+  </div>
+</div>
+
+<div class="bigtype" aria-hidden="true"><span>ZBRAIN</span><span>CZ BRAIN.</span></div>
+<canvas id="scene" aria-label="Changpeng Zhao's ZBRAIN, made of dots and wired to an old computer. Drag to spin it, click it to make it think." role="img"></canvas>
+<div class="fallback"><img src="assets/brand/zbrain-logo-master.png?v=1" alt="ZBRAIN character logo"></div>
+<div id="thoughts" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="#" data-nav="home"><img src="assets/brand/zbrain-logo.png?v=1" alt="ZBRAIN logo">ZBRAIN</a>
+  <nav class="links" id="links" aria-label="Main">
+    <a href="#" data-nav="home" aria-current="page">Brain</a>
+    <a href="#how" data-nav="how">How it works</a>
+    <a href="#about" data-nav="about">About</a>
+    <a href="#token" data-nav="token">Token</a>
+  </nav>
+  <button class="iconbtn" id="soundBtn" aria-pressed="false" aria-label="Sound">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="sndWave" d="M16.5 8.5a5 5 0 0 1 0 7" opacity=".25"/></svg>
+    <span id="soundLbl">Sound off</span>
+  </button>
+  <a class="btn buy" href="#token" data-nav="token">Buy <span class="tk">$ZBRAIN</span></a>
+  <button class="iconbtn burger" id="burger" aria-expanded="false" aria-controls="links">Menu</button>
+</header>
+
+<main class="hud" id="hud">
+  <div class="intro" id="intro">
+    <h1>Changpeng Zhao's brain, running live.</h1>
+    <p>ZBRAIN turns CZ’s public builder energy into a living point-cloud brain. It calculates, watches markets and never stops building.</p>
+    <div class="row">
+      <button class="btn" id="thinkBtn">Make it think</button>
+      <a class="btn ghost" href="#how" data-nav="how">How it works</a>
+    </div>
+  </div>
+
+  <section class="monitor" id="monitor" aria-label="Brain monitor">
+    <h2><span class="dot"></span>Brain monitor</h2>
+    <ul class="feed" id="feed" aria-live="off"></ul>
+    <div class="meters">
+      <span>Thinking</span><div class="meter"><i id="mThink"></i></div>
+      <span>Cartoon cortex</span><div class="meter pink"><i id="mCartoon"></i></div>
+      <span>Reading</span><div class="meter mint"><i id="mRead"></i></div>
+    </div>
+    <div class="stats">
+      <span>Neurons on screen</span><b id="sNeurons">0</b>
+      <span>Primes found</span><b id="sPrimes">0</b>
+      <span>Games lost</span><b id="sLost">0</b>
+      <span>Articles read</span><b id="sRead">0</b>
+    </div>
+    <small>Simulated in your browser. The math is real.</small>
+  </section>
+
+  <div class="nowplaying" id="nowplaying">
+    <div><div class="lbl" id="npLbl">Booting</div><div class="ttl" id="npTtl">Cartoon cortex</div></div>
+    <button class="btn pink" id="chanBtn">Change channel</button>
+  </div>
+
+  <div class="hint" id="hint">Drag to spin him. Click his brain to make him think.</div>
+</main>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<aside class="page" id="page" role="dialog" aria-modal="false" aria-labelledby="pageTitle" tabindex="-1">
+  <div class="page-inner">
+    <button class="iconbtn close" id="closePage" aria-label="Close and go back to the brain">Close</button>
+
+    <section data-page="how">
+      <h2 id="pageTitle">How we made his brain</h2>
+      <ol class="steps">
+        <li><b>We mapped the public signal</b>Builder quotes, crypto history, market cycles and the ideas associated with CZ’s public persona.</li>
+        <li><b>We compressed the noise</b>Only the strongest signals remained: build, learn, adapt and keep moving.</li>
+        <li><b>We turned it into neurons</b>Each dot is one tiny signal. Together they form the animated ZBRAIN character.</li>
+        <li><b>We plugged it into a computer</b>Then we let it do whatever it wanted. It chose cartoons.</li>
+      </ol>
+      <div class="row"><button class="btn" id="replayBtn">Replay the upload</button></div>
+      <h3>What the brain does all day</h3>
+      <ul class="does">
+        <li>Does arithmetic, for real. Sometimes gets it wrong first, then fixes it.</li>
+        <li>Hunts for prime numbers in the background and never stops.</li>
+        <li>Watches kids’ cartoons over and over.</li>
+        <li>Plays kids’ games. Loses a lot. Puts every shape in the square hole.</li>
+        <li>Sometimes opens Wikipedia and reads one paragraph.</li>
+      </ul>
+      <p class="fine">ZBRAIN is an unaffiliated parody simulation inspired by public culture. No private data is used. Everything runs in your browser.</p>
+    </section>
+
+    <section data-page="about">
+      <h2>Meet ZBRAIN</h2>
+      <img class="portrait" src="assets/brand/zbrain-logo.png?v=1" alt="ZBRAIN point-cloud character">
+      <p>ZBRAIN is a stylized point-cloud interpretation of Changpeng Zhao: close-cropped dark hair, a natural V hairline, rectangular glasses and a focused stare.</p>
+      <p>Built around the idea of relentless execution, it turns public crypto culture into a playful animated brain.</p>
+      <p>So we created ZBRAIN. <strong>Always online.</strong> Always calculating, learning and building inside your browser.</p>
+      <h3>Known for</h3>
+      <ul class="does">
+        <li>The close-cropped dark hair and integrated V-shaped hairline.</li>
+        <li>The thin rectangular CZ-style glasses.</li>
+        <li>A calm, slightly bored stare, even in dot form.</li>
+      </ul>
+      <p class="fine">ZBRAIN is a fictional, unaffiliated parody character. It is not Changpeng Zhao and does not use private data.</p>
+    </section>
+
+    <section data-page="token">
+      <h2>$ZBRAIN lives on Robinhood Chain</h2>
+      <p>The token is the key to the ZBRAIN experiment. Hold it, meme it and watch the brain think.</p>
+      <dl class="facts">
+        <dt>Ticker</dt><dd class="tk">$ZBRAIN</dd>
+        <dt>Chain</dt><dd>Robinhood Chain</dd>
+        <dt>Supply</dt><dd>To be announced</dd>
+        <dt>Taxes</dt><dd>To be announced</dd>
+      </dl>
+      <h3>Contract</h3>
+      <div class="ca"><code id="caText">0x0000…0000</code><button class="btn" id="copyCa">Copy</button></div>
+      <p class="fine" id="caNote">Placeholder until launch. Always check the contract on the official X account.</p>
+      <div class="row">
+        <a class="btn pink" id="dexLink" href="#" target="_blank" rel="noopener">Open DexScreener</a>
+        <a class="btn ghost" id="xLink" href="#" target="_blank" rel="noopener">Follow on X</a>
+      </div>
+      <h3>How to buy</h3>
+      <ol class="steps">
+        <li><b>Get a wallet</b>Any wallet that supports Robinhood Chain.</li>
+        <li><b>Bring ETH</b>Bridge ETH to Robinhood Chain.</li>
+        <li><b>Swap</b>Paste the contract into a DEX on Robinhood Chain and swap.</li>
+      </ol>
+      <p class="fine">$ZBRAIN is a meme token. It promises nothing, including returns. The brain doesn’t promise anything either. Not financial advice.</p>
+    </section>
+  </div>
+</aside>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script>
+(() => {
+"use strict";
+/* ===== Edit these before launch ===== */
+const CONFIG = {
+  ticker: "$ZBRAIN",
+  contract: "0x0000000000000000000000000000000000000000",
+  dexscreener: "https://dexscreener.com/",
+  x: "https://x.com/"
+};
+
+const $ = s => document.querySelector(s);
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const hasGsap = typeof window.gsap !== "undefined";
+const tween = (obj, vars) => {
+  if (hasGsap) return gsap.to(obj, vars);
+  Object.keys(vars).forEach(k => { if (typeof obj[k] !== "undefined") obj[k] = vars[k]; });
+  if (vars.onUpdate) vars.onUpdate(); if (vars.onComplete) vars.onComplete();
+};
+
+/* ---- config into DOM ---- */
+document.querySelectorAll(".tk").forEach(e => e.textContent = CONFIG.ticker);
+const isPlaceholderCA = /^0x0+$/.test(CONFIG.contract);
+$("#caText").textContent = isPlaceholderCA ? "Contract coming soon" : CONFIG.contract;
+$("#dexLink").href = CONFIG.dexscreener; $("#xLink").href = CONFIG.x;
+if (!isPlaceholderCA) $("#caNote").textContent = "Always double-check the contract before you swap.";
+$("#copyCa").addEventListener("click", async () => {
+  const b = $("#copyCa");
+  if (isPlaceholderCA) { b.textContent = "Not live yet"; setTimeout(() => b.textContent = "Copy", 1600); return; }
+  try { await navigator.clipboard.writeText(CONFIG.contract); b.textContent = "Copied"; }
+  catch (e) { b.textContent = "Select and copy"; }
+  setTimeout(() => b.textContent = "Copy", 1600);
+});
+
+/* ---- marquee ---- */
+const MARQ = ["2 + 2 = 4, confirmed", "watched Blobby again", "adjusted the glasses", "lost at Jump Guy", "put the star in the square hole", "still thinking about the hot dog", "buzz cut: ready", CONFIG.ticker + " on Robinhood Chain", "found another prime", "frames: perfectly level"];
+const mHtml = MARQ.map(t => `<span>${t}</span><i>●</i>`).join("");
+$("#track").innerHTML = mHtml + mHtml;
+
+/* ---- sound ---- */
+let audio = null, soundOn = false;
+function blip(freq = 880, dur = 0.07, type = "sine", vol = 0.05) {
+  if (!soundOn || !audio) return;
+  const o = audio.createOscillator(), g = audio.createGain();
+  o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(vol, audio.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + dur);
+  o.connect(g).connect(audio.destination); o.start(); o.stop(audio.currentTime + dur + 0.02);
+}
+function staticNoise() {
+  if (!soundOn || !audio) return;
+  const len = audio.sampleRate * 0.18, buf = audio.createBuffer(1, len, audio.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+  const s = audio.createBufferSource(), g = audio.createGain(); g.gain.value = 0.04;
+  s.buffer = buf; s.connect(g).connect(audio.destination); s.start();
+}
+$("#soundBtn").addEventListener("click", () => {
+  soundOn = !soundOn;
+  if (soundOn && !audio) { try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { soundOn = false; } }
+  if (audio && audio.state === "suspended") audio.resume();
+  $("#soundBtn").setAttribute("aria-pressed", soundOn);
+  $("#soundLbl").textContent = soundOn ? "Sound on" : "Sound off";
+  $("#sndWave").setAttribute("opacity", soundOn ? "1" : ".25");
+  blip(660, 0.08);
+});
+
+/* ---- mobile menu ---- */
+$("#burger").addEventListener("click", () => {
+  const open = $("#links").classList.toggle("open");
+  $("#burger").setAttribute("aria-expanded", open);
+});
+
+/* ---- WebGL check ---- */
+let renderer;
+try {
+  if (typeof THREE === "undefined") throw new Error("no three");
+  renderer = new THREE.WebGLRenderer({ canvas: $("#scene"), antialias: true, alpha: true, powerPreference: "high-performance" });
+} catch (e) {
+  document.body.classList.add("nogl");
+  $("#pre").remove();
+  return;
+}
+renderer.setClearColor(0x000000, 0);
+const DPR = Math.min(window.devicePixelRatio || 1, 2);
+renderer.setPixelRatio(DPR);
+
+const MOBILE = window.innerWidth < 760 || matchMedia("(pointer: coarse)").matches;
+const Q = MOBILE ? 0.5 : 1;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
+camera.position.set(0, 0.1, 9.2);
+
+/* seeded random for a stable brain */
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const R = mulberry32(20260924);
+const rr = (a, b) => a + R() * (b - a);
+const C = h => new THREE.Color(h);
+const lerpC = (a, b, t) => a.clone().lerp(b, t);
+
+const COL = {
+  pink: C("#FF7EB6"), pinkHi: C("#FFB8DA"), mag: C("#B23C9F"), magD: C("#7D2690"), white: C("#FFFFFF"),
+  gold: C("#FFD23F"), goldD: C("#E39B12"), goldHi: C("#FFF3B0"),
+  orange: C("#FF8A2A"), orangeHi: C("#FFC07A"), orangeD: C("#DD5A16"),
+  cream: C("#FFF3B0"), creamD: C("#D8C27A"), mint: C("#3DE08A"),
+  ink: C("#171717"), inkHi: C("#6C6A63"), glass: C("#D9EEF7")
+};
+
+class PB {
+  constructor() { this.p = []; this.c = []; this.seed = []; this.delay = []; this.size = []; this.reg = []; this.sc = []; }
+  add(x, y, z, col, size, region, delay) {
+    this.p.push(x, y, z); this.c.push(col.r, col.g, col.b); this.seed.push(R()); this.size.push(size); this.reg.push(region); this.delay.push(delay);
+    const th = R() * Math.PI * 2, ph = Math.acos(2 * R() - 1), rad = rr(5, 12);
+    this.sc.push(Math.sin(ph) * Math.cos(th) * rad * 1.3, Math.cos(ph) * rad * 0.7, Math.sin(ph) * Math.sin(th) * rad - 1);
+  }
+  get count() { return this.p.length / 3; }
+  geometry() {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(this.p, 3));
+    g.setAttribute("aScatter", new THREE.Float32BufferAttribute(this.sc, 3));
+    g.setAttribute("aColor", new THREE.Float32BufferAttribute(this.c, 3));
+    g.setAttribute("aSeed", new THREE.Float32BufferAttribute(this.seed, 1));
+    g.setAttribute("aDelay", new THREE.Float32BufferAttribute(this.delay, 1));
+    g.setAttribute("aSize", new THREE.Float32BufferAttribute(this.size, 1));
+    g.setAttribute("aRegion", new THREE.Float32BufferAttribute(this.reg, 1));
+    return g;
+  }
+}
+
+const VERT = `
+attribute vec3 aScatter; attribute vec3 aColor; attribute float aSeed; attribute float aDelay; attribute float aSize; attribute float aRegion;
+uniform float uTime, uAssemble, uPR, uScale, uPAT, uPBT, uAct, uTwitch, uSway;
+uniform vec3 uPA, uPB;
+varying vec3 vColor;
+float wave(vec3 p, vec3 o, float t0){
+  float e = uTime - t0; if(e < 0.0 || e > 3.5) return 0.0;
+  float d = distance(p, o); float f = e * 2.4;
+  return exp(-pow(d - f, 2.0) * 9.0) * exp(-e * 0.8);
+}
+void main(){
+  float st = clamp((uAssemble - aDelay * 0.55) / 0.45, 0.0, 1.0);
+  st = st * st * (3.0 - 2.0 * st);
+  vec3 p = mix(aScatter, position, st);
+  if(aRegion > 2.5 && aRegion < 3.5){
+    float w = clamp((0.7 - position.y) * 0.55, 0.0, 1.0);
+    p.x += sin(uTime * 1.1 + position.z * 1.7) * 0.022 * w * uSway;
+    p.z += cos(uTime * 0.9 + position.x * 1.3) * 0.014 * w * uSway;
+  }
+  if(aRegion > 3.5 && aRegion < 4.5){
+    p.y += sin(uTime * 36.0 + position.x * 5.0) * 0.02 * uTwitch * abs(position.x);
+  }
+  float isBrain = 1.0 - step(2.5, aRegion);
+  float wv = (wave(position, uPA, uPAT) * 1.1 + wave(position, uPB, uPBT) * 0.75) * isBrain;
+  float tick = floor(uTime * 5.0 + aSeed * 17.0);
+  float rnd = fract(sin(aSeed * 127.1 + tick * 311.7) * 43758.5453);
+  float tw = step(0.985 - uAct * 0.05, rnd) * isBrain;
+  float boost = clamp(wv + tw * 0.8, 0.0, 1.0);
+  vColor = mix(aColor, vec3(1.0), boost * 0.85);
+  vec4 mv = modelViewMatrix * vec4(p, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = aSize * uPR * uScale * (1.0 + boost * 0.8 + (1.0 - st) * 0.5) / -mv.z;
+}`;
+const FRAG = `
+varying vec3 vColor;
+void main(){ vec2 c = gl_PointCoord - 0.5; if(dot(c, c) > 0.25) discard; gl_FragColor = vec4(vColor, 1.0); }`;
+function makeMat() {
+  return new THREE.ShaderMaterial({
+    vertexShader: VERT, fragmentShader: FRAG,
+    uniforms: {
+      uTime: { value: 0 }, uAssemble: { value: 0 }, uPR: { value: DPR }, uScale: { value: 7 },
+      uPA: { value: new THREE.Vector3(0, 9, 0) }, uPAT: { value: -99 }, uPB: { value: new THREE.Vector3(0, 9, 0) }, uPBT: { value: -99 },
+      uAct: { value: 0.3 }, uTwitch: { value: 0 }, uSway: { value: 1 }
+    }
+  });
+}
+
+/* ================= BRAIN + CZ FEATURES ================= */
+const head = new PB();
+function fold(x, y, z) {
+  const wx = x + 0.25 * Math.sin(y * 4.1 + z * 2.3), wy = y + 0.25 * Math.sin(x * 3.7 - z * 1.9);
+  const a = Math.sin(wx * 10.5 + Math.sin(wy * 6.3) * 1.7);
+  const b = Math.sin(wy * 11.2 + Math.sin(wx * 5.9) * 1.9 + z * 3.0);
+  return a + b * 0.85;
+}
+// cerebrum hemispheres (top of the brain faces the viewer, like the logo)
+{
+  const target = Math.floor(22000 * Q); let n = 0, guard = 0;
+  while (n < target && guard++ < target * 20) {
+    const side = R() < 0.5 ? -1 : 1;
+    const u = R() * 2 - 1, t = R() * Math.PI * 2, s = Math.sqrt(1 - u * u);
+    const dx = s * Math.cos(t), dy = u, dz = s * Math.sin(t);
+    let x = dx * 0.6, y = dy * 1.02, z = dz * 0.6;
+    if (dx * side < 0) x *= 0.88;
+    if (z < 0) z *= 0.55;
+    if (y < 0) x *= 1 - 0.12 * (-dy);
+    const cx = side * 0.63; x += cx; y += 0.02;
+    const f = fold(x, y, z);
+    const ridge = Math.abs(f) < 0.34;
+    if (!ridge && R() > 0.2) continue;
+    const disp = ridge ? 1.04 : 0.975;
+    x = cx + (x - cx) * disp; y = 0.02 + (y - 0.02) * disp; z *= disp;
+    const col = ridge ? (R() < 0.08 ? COL.white : lerpC(COL.pink, COL.pinkHi, R() * 0.5)) : lerpC(COL.magD, COL.mag, R() * 0.5);
+    head.add(x, y, z, col, ridge ? 4.6 : 3, 0, R() * 0.35);
+    n++;
+  }
+}
+// cerebellum, peeking out at the bottom
+for (let i = 0, n = Math.floor(3600 * Q); i < n; i++) {
+  const side = R() < 0.5 ? -1 : 1;
+  const u = R() * 2 - 1, t = R() * Math.PI * 2, s = Math.sqrt(1 - u * u);
+  const dx = s * Math.cos(t), dy = u, dz = s * Math.sin(t);
+  const x = dx * 0.44 + side * 0.4, y = dy * 0.3 - 0.9, z = dz * 0.3 - 0.18;
+  const band = Math.abs(Math.sin((y + 0.9) * 36 + dx * 1.8));
+  const ridge = band > 0.78;
+  if (!ridge && R() > 0.45) continue;
+  head.add(x, y, z, ridge ? lerpC(COL.pink, COL.pinkHi, R()) : lerpC(COL.magD, COL.mag, R()), ridge ? 4 : 3.2, 1, 0.08 + R() * 0.35);
+}
+// brainstem
+const STEM_END = new THREE.Vector3(0, -1.62, -0.12);
+for (let i = 0, n = Math.floor(1500 * Q); i < n; i++) {
+  const t = R(); let a = R() * Math.PI * 2;
+  if (R() < 0.75) a = Math.round(a / (Math.PI * 2 / 20)) * (Math.PI * 2 / 20) + rr(-0.02, 0.02);
+  const r = 0.2 - 0.07 * t;
+  head.add(Math.cos(a) * r, -0.9 - t * 0.74, -0.16 + Math.sin(a) * r * 0.8, R() < 0.3 ? COL.pinkHi : COL.pink, 3.4, 2, 0.12 + R() * 0.35);
+}
+// CZ buzz cut: short dark dotted stubble
+// CZ V hairline: receded temples with central widow's peak
+{
+  for (let i = 0, n = Math.floor(9800 * Q); i < n; i++) {
+    const a = R() * Math.PI * 2, r = Math.sqrt(R());
+    const x = Math.cos(a) * r * 1.23;
+    const z = Math.sin(a) * r * 0.82 - 0.08;
+    const dome = Math.sqrt(Math.max(0, 1 - r * r));
+    const front = Math.max(0, (z + 0.08) / 0.82);
+    const widowPeak = Math.max(0, 1 - Math.abs(x) / 0.34);
+    const templeRecession = Math.max(0, 1 - Math.abs(Math.abs(x) - 0.62) / 0.34);
+    const hairline = 0.60 + front * (templeRecession * 0.13 - widowPeak * 0.07);
+    const y = hairline + dome * (0.69 - front * 0.08) + rr(-0.012, 0.012);
+    const edge = dome < 0.18;
+    const col = R() < 0.18 ? COL.inkHi : COL.ink;
+    head.add(x + rr(-0.008, 0.008), y, z + rr(-0.008, 0.008), col, edge ? 3.4 : 3.8, 3, 0.32 + R() * 0.28);
+  }
+}
+
+// CZ rectangular glasses
+function addGlassesFrame(cx) {
+  const w = 0.68, h = 0.34, z = 0.84, y = 0.16;
+  for (let i = 0, n = Math.floor(150 * Q); i < n; i++) {
+    const q = i / Math.max(1, n - 1), x = cx - w / 2 + q * w;
+    head.add(x, y + h / 2 + rr(-0.006, 0.006), z, R() < 0.12 ? COL.inkHi : COL.ink, 2.9, 4, 0.58 + R() * 0.18);
+    head.add(x, y - h / 2 + rr(-0.006, 0.006), z, COL.ink, 2.7, 4, 0.58 + R() * 0.18);
+  }
+  for (let i = 0, n = Math.floor(85 * Q); i < n; i++) {
+    const q = i / Math.max(1, n - 1), yy = y - h / 2 + q * h;
+    head.add(cx - w / 2, yy, z, COL.ink, 2.7, 4, 0.6 + R() * 0.18);
+    head.add(cx + w / 2, yy, z, COL.ink, 2.7, 4, 0.6 + R() * 0.18);
+  }
+}
+addGlassesFrame(-0.43); addGlassesFrame(0.43);
+// Straight black eyes: no white curved eye strokes
+const eyeY = 0.13, eyeZ = 0.828;
+for (const cx of [-0.43, 0.43]) {
+  for (let i = 0, n = Math.floor(180 * Q); i < n; i++) {
+    const q = i / Math.max(1, n - 1);
+    head.add(cx - 0.17 + q * 0.34, eyeY + rr(-0.004, 0.004), eyeZ + rr(-0.003, 0.003), COL.ink, 3.8, 5, 0.72 + R() * 0.12);
+  }
+}
+for (let i = 0, n = Math.floor(120 * Q); i < n; i++) {
+  const q = i / Math.max(1, n - 1);
+  head.add(-0.09 + q * 0.18, 0.19 + Math.sin(q * Math.PI) * 0.035, 0.86, COL.ink, 2.9, 4, 0.64 + R() * 0.16);
+}
+for (const side of [-1, 1]) {
+  for (let i = 0, n = Math.floor(130 * Q); i < n; i++) {
+    const q = i / Math.max(1, n - 1);
+    head.add(side * (0.77 + q * 0.38), 0.20 - q * 0.07, 0.82 - q * 0.24, COL.ink, 2.7, 4, 0.66 + R() * 0.16);
+  }
+}
+const headMat = makeMat();
+const headPts = new THREE.Points(head.geometry(), headMat);
+const brainGroup = new THREE.Group(); brainGroup.add(headPts);
+// solid cores under the dots, like the purple base in the logo
+const coreMats = [];
+function coreMat(hex) { const m = new THREE.MeshBasicMaterial({ color: hex, transparent: true, opacity: 0, side: THREE.DoubleSide }); coreMats.push(m); return m; }
+function shapeCzHairline(geometry) {
+  const p = geometry.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+    if (z <= 0.08 || y >= 0.20) continue;
+    const front = Math.min(1, (z - 0.08) / 0.82);
+    const centerV = Math.max(0, 1 - Math.abs(x) / 0.30);
+    const temple = Math.max(0, 1 - Math.abs(Math.abs(x) - 0.56) / 0.32);
+    const rimY = 0.075 + front * (temple * 0.12 - centerV * 0.10);
+    const blend = Math.min(1, (0.20 - y) / 0.13);
+    p.setY(i, y + (rimY - y) * blend);
+  }
+  p.needsUpdate = true;
+  geometry.computeVertexNormals();
+}
+const brainCore = coreMat(0x8A2B97);
+const hairCore = coreMat(0x171717);
+const glassesCore = coreMat(0x171717);
+const eyeCore = coreMat(0x050505);
+hairCore.userData.maxOpacity = 0.52;
+glassesCore.userData.maxOpacity = 0.72;
+eyeCore.userData.maxOpacity = 0.9;
+[-1, 1].forEach(side => {
+  const h = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 24), brainCore);
+  h.scale.set(0.64, 0.96, 0.5); h.position.set(side * 0.63, 0.02, 0.02); brainGroup.add(h);
+  const c = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 16), brainCore);
+  c.scale.set(0.4, 0.26, 0.26); c.position.set(side * 0.4, -0.9, -0.18); brainGroup.add(c);
+});
+{
+  const mid = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.3, 0.45), brainCore); mid.position.set(0, -0.1, -0.12); brainGroup.add(mid);
+  const st = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.11, 0.74, 16, 1, true), brainCore);
+  st.position.set(0, -1.27, -0.16); brainGroup.add(st);
+  const domeGeometry = new THREE.SphereGeometry(1, 40, 20, 0, Math.PI * 2, 0, 1.5);
+  shapeCzHairline(domeGeometry);
+  const dome = new THREE.Mesh(domeGeometry, hairCore);
+  dome.scale.set(1.23, 0.69, 0.82); dome.position.set(0, 0.56, -0.08); brainGroup.add(dome);
+}
+const glassesCoreGroup = new THREE.Group();
+for (const cx of [-0.43, 0.43]) {
+  for (const yy of [-0.01, 0.33]) {
+    const bar = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.018, 0.018), glassesCore);
+    bar.position.set(cx, yy, 0.835); glassesCoreGroup.add(bar);
+  }
+  for (const xx of [cx - 0.34, cx + 0.34]) {
+    const bar = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.34, 0.018), glassesCore);
+    bar.position.set(xx, 0.16, 0.835); glassesCoreGroup.add(bar);
+  }
+}
+{
+  const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.018, 0.018), glassesCore);
+  bridge.position.set(0, 0.19, 0.855); glassesCoreGroup.add(bridge);
+}
+brainGroup.add(glassesCoreGroup);
+for (const cx of [-0.43, 0.43]) {
+  const eye = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.035, 0.02), eyeCore);
+  eye.position.set(cx, eyeY, 0.823); brainGroup.add(eye);
+}
+
+
+/* ================= COMPUTER ================= */
+const comp = new PB();
+function boxPts(cx, cy, cz, w, h, d, n, hole) {
+  const faces = [[w, h, "z", 1], [w, h, "z", -1], [w, d, "y", 1], [w, d, "y", -1], [d, h, "x", 1], [d, h, "x", -1]];
+  const areas = faces.map(f => f[0] * f[1]), tot = areas.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < n; i++) {
+    let r = R() * tot, fi = 0; while (r > areas[fi]) { r -= areas[fi]; fi++; }
+    const f = faces[fi], a = rr(-0.5, 0.5), b = rr(-0.5, 0.5);
+    let x, y, z;
+    if (f[2] === "z") { x = a * w; y = b * h; z = f[3] * d / 2; }
+    else if (f[2] === "y") { x = a * w; z = b * d; y = f[3] * h / 2; }
+    else { z = a * d; y = b * h; x = f[3] * w / 2; }
+    if (hole && f[2] === "z" && f[3] === 1 && Math.abs(x - hole[0]) < hole[2] / 2 + 0.03 && Math.abs(y - hole[1]) < hole[3] / 2 + 0.03) continue;
+    const edge = Math.min(0.5 - Math.abs(a), 0.5 - Math.abs(b)) < 0.018;
+    const shade = f[2] === "y" && f[3] === -1 ? 0.8 : f[2] === "x" ? 0.45 : 0.15;
+    comp.add(cx + x, cy + y, cz + z, edge ? COL.white : lerpC(COL.cream, COL.creamD, shade * R() + shade * 0.4), edge ? 4 : 3, 6, 0.2 + R() * 0.6);
+  }
+}
+function edgePts(cx, cy, cz, w, h, d, spacing) {
+  const xs = [-w / 2, w / 2], ys = [-h / 2, h / 2], zs = [-d / 2, d / 2];
+  const line = (a, b) => { const len = a.distanceTo(b), n = Math.ceil(len / spacing); for (let i = 0; i <= n; i++) { const p = a.clone().lerp(b, i / n); comp.add(cx + p.x, cy + p.y, cz + p.z, COL.white, 4.2, 6, 0.3 + R() * 0.5); } };
+  for (const y of ys) for (const z of zs) line(new THREE.Vector3(xs[0], y, z), new THREE.Vector3(xs[1], y, z));
+  for (const x of xs) for (const z of zs) line(new THREE.Vector3(x, ys[0], z), new THREE.Vector3(x, ys[1], z));
+  for (const x of xs) for (const y of ys) line(new THREE.Vector3(x, y, zs[0]), new THREE.Vector3(x, y, zs[1]));
+}
+const SCR = { x: 0, y: 0.4, w: 1.3, h: 0.98 };
+boxPts(0, 0.35, 0.3, 1.72, 1.38, 0.6, Math.floor(5200 * Q), [SCR.x, SCR.y - 0.35, SCR.w, SCR.h]);
+edgePts(0, 0.35, 0.3, 1.72, 1.38, 0.6, 0.035);
+boxPts(0, 0.33, -0.3, 1.25, 1.02, 0.62, Math.floor(2600 * Q));
+edgePts(0, 0.33, -0.3, 1.25, 1.02, 0.62, 0.045);
+boxPts(0, -0.43, 0, 0.55, 0.16, 0.55, Math.floor(700 * Q));
+boxPts(0, -0.53, 0.05, 1.0, 0.05, 0.8, Math.floor(900 * Q));
+boxPts(0, -0.52, 1.12, 1.62, 0.09, 0.52, Math.floor(1500 * Q));
+edgePts(0, -0.52, 1.12, 1.62, 0.09, 0.52, 0.045);
+for (let r = 0; r < 4; r++) for (let k = 0; k < 13; k++) { // keys
+  const kx = -0.69 + k * 0.115, kz = 0.94 + r * 0.115;
+  for (let i = 0; i < 7; i++) comp.add(kx + rr(-0.035, 0.035), -0.46, kz + rr(-0.035, 0.035), R() < 0.3 ? COL.white : COL.cream, 3.2, 6, 0.5 + R() * 0.4);
+}
+for (let i = 0; i < 40; i++) comp.add(0.7 + rr(-0.025, 0.025), -0.2 + rr(-0.025, 0.025), 0.605, COL.mint, 4.5, 6, 0.9);
+const PORT = new THREE.Vector3(-0.63, 0.1, -0.35);
+for (let i = 0; i < 120; i++) comp.add(-0.63 - rr(0, 0.08), 0.1 + rr(-0.06, 0.06), -0.35 + rr(-0.06, 0.06), COL.white, 3.6, 6, 0.8);
+const compMat = makeMat();
+const compPts = new THREE.Points(comp.geometry(), compMat);
+const compGroup = new THREE.Group(); compGroup.add(compPts);
+
+// screen with canvas texture
+const sc = document.createElement("canvas"); sc.width = 480; sc.height = 360;
+const sx = sc.getContext("2d");
+const scrTex = new THREE.CanvasTexture(sc); scrTex.minFilter = THREE.LinearFilter;
+const screenMat = new THREE.MeshBasicMaterial({ map: scrTex, transparent: true, opacity: 0 });
+const screen = new THREE.Mesh(new THREE.PlaneGeometry(SCR.w, SCR.h), screenMat);
+screen.position.set(SCR.x, SCR.y, 0.605);
+compGroup.add(screen);
+
+/* ================= STAGE + CABLE ================= */
+const stage = new THREE.Group(); scene.add(stage);
+stage.add(brainGroup); stage.add(compGroup);
+compGroup.position.set(3.05, -0.95, 0.35); compGroup.rotation.y = -0.36;
+
+const CABLE_N = Math.floor(1100 * Q + 300);
+const cablePos = new Float32Array(CABLE_N * 3), cableCol = new Float32Array(CABLE_N * 3), cableSize = new Float32Array(CABLE_N);
+const cableGeo = new THREE.BufferGeometry();
+const zeros = n => new Float32Array(n);
+cableGeo.setAttribute("position", new THREE.BufferAttribute(cablePos, 3).setUsage(THREE.DynamicDrawUsage));
+cableGeo.setAttribute("aScatter", new THREE.BufferAttribute(zeros(CABLE_N * 3), 3));
+for (let i = 0; i < CABLE_N; i++) { const c = i % 3 === 0 ? COL.cream : COL.white; cableCol.set([c.r, c.g, c.b], i * 3); cableSize[i] = 3.4; }
+cableGeo.setAttribute("aColor", new THREE.BufferAttribute(cableCol, 3));
+cableGeo.setAttribute("aSeed", new THREE.BufferAttribute(zeros(CABLE_N), 1));
+cableGeo.setAttribute("aDelay", new THREE.BufferAttribute(zeros(CABLE_N), 1));
+cableGeo.setAttribute("aSize", new THREE.BufferAttribute(cableSize, 1));
+cableGeo.setAttribute("aRegion", new THREE.BufferAttribute(new Float32Array(CABLE_N).fill(7), 1));
+const cableMat = makeMat(); cableMat.uniforms.uAssemble.value = 1;
+const cablePts = new THREE.Points(cableGeo, cableMat); cablePts.frustumCulled = false;
+scene.add(cablePts);
+cableGeo.setDrawRange(0, 0);
+
+const PULSE_N = 24;
+const pulsePos = new Float32Array(PULSE_N * 3).fill(999), pulseCol = new Float32Array(PULSE_N * 3), pulseSize = new Float32Array(PULSE_N).fill(10);
+const pulseGeo = new THREE.BufferGeometry();
+pulseGeo.setAttribute("position", new THREE.BufferAttribute(pulsePos, 3).setUsage(THREE.DynamicDrawUsage));
+pulseGeo.setAttribute("aScatter", new THREE.BufferAttribute(zeros(PULSE_N * 3), 3));
+pulseGeo.setAttribute("aColor", new THREE.BufferAttribute(pulseCol, 3).setUsage(THREE.DynamicDrawUsage));
+pulseGeo.setAttribute("aSeed", new THREE.BufferAttribute(zeros(PULSE_N), 1));
+pulseGeo.setAttribute("aDelay", new THREE.BufferAttribute(zeros(PULSE_N), 1));
+pulseGeo.setAttribute("aSize", new THREE.BufferAttribute(pulseSize, 1));
+pulseGeo.setAttribute("aRegion", new THREE.BufferAttribute(new Float32Array(PULSE_N).fill(8), 1));
+const pulseMat = makeMat(); pulseMat.uniforms.uAssemble.value = 1;
+const pulsePts = new THREE.Points(pulseGeo, pulseMat); pulsePts.frustumCulled = false;
+scene.add(pulsePts);
+
+const pulses = [];
+let cableReveal = 0;
+function sendPulse(dir, color) { if (cableReveal < 1) return; pulses.push({ t: 0, dir, col: color || (dir > 0 ? COL.mint : COL.pink), speed: 0.55 + Math.random() * 0.25 }); if (pulses.length > PULSE_N) pulses.shift(); }
+
+const _a = new THREE.Vector3(), _b = new THREE.Vector3();
+let curve = null;
+function updateCable(time) {
+  brainGroup.updateMatrixWorld(); compGroup.updateMatrixWorld();
+  const s = brainGroup.localToWorld(_a.copy(STEM_END));
+  const e = compGroup.localToWorld(_b.copy(PORT));
+  const sc2 = stage.scale.x;
+  const mid = new THREE.Vector3((s.x + e.x) / 2, Math.min(s.y, e.y) - 0.75 * sc2, 0.9 * sc2);
+  const pts = [s.clone(), s.clone().add(new THREE.Vector3(0.05 * sc2, -0.45 * sc2, 0.25 * sc2)), mid, e.clone().add(new THREE.Vector3(-0.45 * sc2, -0.2 * sc2, 0.1 * sc2)), e.clone()];
+  curve = new THREE.CatmullRomCurve3(pts, false, "catmullrom", 0.5);
+  const rad = 0.035 * sc2;
+  for (let i = 0; i < CABLE_N; i++) {
+    const t = i / (CABLE_N - 1), p = curve.getPoint(t);
+    const ang = t * 140 + (i % 3) * 2.094 + time * 0.6;
+    cablePos[i * 3] = p.x + Math.cos(ang) * rad; cablePos[i * 3 + 1] = p.y + Math.sin(ang) * rad; cablePos[i * 3 + 2] = p.z + Math.sin(ang * 0.5) * rad;
+  }
+  cableGeo.attributes.position.needsUpdate = true;
+}
+function updatePulses(dt) {
+  for (let i = pulses.length - 1; i >= 0; i--) {
+    const p = pulses[i]; p.t += dt * p.speed;
+    if (p.t >= 1) {
+      pulses.splice(i, 1);
+      if (p.dir > 0) brainWave("B", new THREE.Vector3(rr(-0.4, 0.4), -0.35, -0.2)); // arrived at brain
+    }
+  }
+  for (let i = 0; i < PULSE_N; i++) {
+    const p = pulses[i];
+    if (!p || !curve) { pulsePos[i * 3] = 999; continue; }
+    const t = p.dir > 0 ? 1 - p.t : p.t, q = curve.getPoint(Math.min(0.999, Math.max(0.001, t)));
+    pulsePos.set([q.x, q.y, q.z], i * 3); pulseCol.set([p.col.r, p.col.g, p.col.b], i * 3);
+  }
+  pulseGeo.attributes.position.needsUpdate = true; pulseGeo.attributes.aColor.needsUpdate = true;
+}
+
+/* ================= LAYOUT ================= */
+let brainBaseY = 0.12, W = 1, H = 1, baseX = 0, shift = 0, stageScale = 1, layoutMode = "desk";
+const pageState = { shift: 0 };
+function layout() {
+  W = window.innerWidth; H = window.innerHeight;
+  renderer.setSize(W, H, false);
+  camera.aspect = W / H;
+  const mobile = W < 760;
+  layoutMode = mobile ? "mob" : "desk";
+  camera.position.z = mobile ? 12.5 : 9.2;
+  camera.updateProjectionMatrix();
+  const halfH = camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), halfW = halfH * camera.aspect;
+  if (mobile) {
+    stageScale = Math.min(1, (halfW * 2 - 0.2) / 3.95);
+    stage.scale.setScalar(stageScale);
+    brainBaseY = 0.88;
+    brainGroup.position.set(0, brainBaseY, 0);
+    compGroup.position.set(0.55, -1.8, 0.35); compGroup.rotation.y = -0.22; compGroup.scale.setScalar(0.7);
+    baseX = 0; stage.position.set(0, 0.15, 0);
+  } else {
+    const leftFrac = Math.min(0.42, 400 / W);
+    const uL = -halfW + 2 * halfW * leftFrac, uR = halfW - 0.25, usable = uR - uL;
+    stageScale = Math.min(1.08, usable / 6.4, (halfH * 2 - 1.3) / 3.6);
+    stage.scale.setScalar(stageScale);
+    brainBaseY = 0.12;
+    brainGroup.position.set(0, brainBaseY, 0);
+    compGroup.position.set(3.1, -0.95, 0.35); compGroup.rotation.y = -0.36; compGroup.scale.setScalar(1);
+    baseX = uL + (usable - 6.4 * stageScale) / 2 + 2.05 * stageScale;
+    stage.position.set(baseX, 0.05, 0);
+  }
+  const sz = 7 * (H / 900) * stageScale * (mobile ? 1.25 : 1) * (camera.position.z / 9.2);
+  [headMat, compMat, cableMat].forEach(m => m.uniforms.uScale.value = sz);
+  pulseMat.uniforms.uScale.value = sz;
+  applyShift();
+}
+function applyShift() {
+  if (layoutMode === "desk") {
+    const halfH = camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), halfW = halfH * camera.aspect;
+    const panelFrac = Math.min(0.55, 560 / W);
+    shift = -pageState.shift * panelFrac * halfW * 0.95;
+  } else shift = 0;
+  stage.position.x = baseX + shift;
+}
+window.addEventListener("resize", layout);
+layout();
+$("#sNeurons").textContent = (head.count + comp.count + CABLE_N).toLocaleString("en-US");
+
+/* ================= BRAIN EVENTS ================= */
+let time = 0;
+function brainWave(slot, originLocal) {
+  const u = headMat.uniforms;
+  if (slot === "A") { u.uPA.value.copy(originLocal); u.uPAT.value = time; }
+  else { u.uPB.value.copy(originLocal); u.uPBT.value = time; }
+}
+const thoughtsEl = $("#thoughts");
+function thoughtBubble(text, cls) {
+  if (!hasGsap) return;
+  const el = document.createElement("div");
+  el.className = "thought " + (cls || "");
+  el.textContent = text; thoughtsEl.appendChild(el);
+  const local = new THREE.Vector3(rr(-1.1, 1.1), rr(1.2, 1.6), 0.4);
+  brainGroup.updateMatrixWorld();
+  const w = brainGroup.localToWorld(local).project(camera);
+  const x = (w.x * 0.5 + 0.5) * W, y = (-w.y * 0.5 + 0.5) * H;
+  const bw = el.offsetWidth;
+  const cx = Math.max(8, Math.min(W - bw - 8, x - bw / 2));
+  gsap.set(el, { x: cx, y: y, opacity: 0, scale: 0.6 });
+  const tl = gsap.timeline({ onComplete: () => el.remove() });
+  tl.to(el, { opacity: 1, scale: 1, y: y - 30, duration: 0.35, ease: "back.out(2)" })
+    .to(el, { y: y - 80, duration: 1.8, ease: "none" }, "<0.1")
+    .to(el, { opacity: 0, duration: 0.4 }, "-=0.45");
+  if (thoughtsEl.children.length > 6) thoughtsEl.firstChild.remove();
+}
+
+/* ================= BRAIN MONITOR (real math) ================= */
+const feed = $("#feed");
+function feedLine(html) {
+  const li = document.createElement("li"); li.innerHTML = html; feed.appendChild(li);
+  while (feed.children.length > 8) feed.firstChild.remove();
+  return li;
+}
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+function mathProblem() {
+  const k = Math.random(); let a, b;
+  if (k < 0.3) { a = ri(2, 12); b = ri(2, 12); return { q: `${a} × ${b}`, a: a * b }; }
+  if (k < 0.5) { a = ri(10, 99); b = ri(10, 99); return { q: `${a} + ${b}`, a: a + b }; }
+  if (k < 0.65) { a = ri(2, 25); return { q: `√${a * a}`, a }; }
+  if (k < 0.8) { a = ri(1, 14); return { q: `2^${a}`, a: 2 ** a }; }
+  a = ri(50, 300); b = ri(1, 49); return { q: `${a} − ${b}`, a: a - b };
+}
+function think(fromUser) {
+  const p = mathProblem();
+  const wrong = Math.random() < 0.2;
+  const li = feedLine(`${p.q} = <span class="ctx">thinking…</span>`);
+  brainWave("A", new THREE.Vector3(rr(-0.9, 0.9), rr(0.1, 0.7), rr(0.2, 0.9)));
+  headMat.uniforms.uTwitch.value = 1; if (hasGsap) gsap.to(headMat.uniforms.uTwitch, { value: 0, duration: 0.9, delay: 0.2 });
+  sendPulse(-1, COL.pink);
+  blip(520 + Math.random() * 300, 0.06);
+  setTimeout(() => {
+    if (wrong) {
+      const bad = p.a + (Math.random() < 0.5 ? -1 : 1) * ri(1, 3);
+      li.innerHTML = `${p.q} = <span class="bad">${bad}</span> <span class="ctx">wait…</span>`;
+      setTimeout(() => { li.innerHTML = `${p.q} = ${p.a} <span class="ok">✓ fixed it</span>`; blip(990, 0.06); }, 900);
+      thoughtBubble(`${p.q} = ${bad}?`, "pink");
+    } else {
+      li.innerHTML = `${p.q} = ${p.a} <span class="ok">✓</span>`;
+      thoughtBubble(`${p.q} = ${p.a}`, fromUser ? "gold" : "");
+      blip(990, 0.05);
+    }
+  }, 600 + Math.random() * 500);
+}
+const JOKES = ["is a hot dog a sandwich: still computing", "π ≈ 3.14159265… got bored", "checking glasses alignment: exact", "how many holes in a straw: 1 or 2", "is cereal soup: parked for later", "fibonacci: 1 1 2 3 5 8 13 21 34…"];
+// background prime hunt (real)
+let primeN = 2, primeCount = 0, primeLast = 2;
+function isPrime(n) { if (n < 2) return false; if (n % 2 === 0) return n === 2; for (let i = 3; i * i <= n; i += 2) if (n % i === 0) return false; return true; }
+function primeStep() { for (let k = 0; k < 120; k++) { if (isPrime(primeN)) { primeCount++; primeLast = primeN; } primeN++; } }
+setInterval(() => { $("#sPrimes").textContent = primeCount.toLocaleString("en-US") + " (latest " + primeLast.toLocaleString("en-US") + ")"; }, 500);
+const stats = { lost: 0, read: 0, score: 0, best: 0 };
+const meters = { think: 30, cartoon: 80, read: 5 };
+function setMeters() {
+  $("#mThink").style.width = meters.think + "%"; $("#mCartoon").style.width = meters.cartoon + "%"; $("#mRead").style.width = meters.read + "%";
+}
+
+/* ================= SCREEN PROGRAMS ================= */
+const G = sx;
+function rrect(x, y, w, h, r) { G.beginPath(); G.moveTo(x + r, y); G.arcTo(x + w, y, x + w, y + h, r); G.arcTo(x + w, y + h, x, y + h, r); G.arcTo(x, y + h, x, y, r); G.arcTo(x, y, x + w, y, r); G.closePath(); }
+function wrap(text, x, y, maxW, lh) { const words = text.split(" "); let line = ""; for (const w of words) { const t = line + w + " "; if (G.measureText(t).width > maxW && line) { G.fillText(line, x, y); line = w + " "; y += lh; } else line = t; } G.fillText(line, x, y); return y; }
+function star(cx, cy, r1, r2, n) { G.beginPath(); for (let i = 0; i < n * 2; i++) { const r = i % 2 ? r2 : r1, a = -Math.PI / 2 + i * Math.PI / n; G.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); } G.closePath(); }
+function shapePath(kind, x, y, s) {
+  G.beginPath();
+  if (kind === "circle") G.arc(x, y, s, 0, Math.PI * 2);
+  else if (kind === "square") G.rect(x - s, y - s, s * 2, s * 2);
+  else if (kind === "triangle") { G.moveTo(x, y - s * 1.1); G.lineTo(x + s * 1.1, y + s * 0.8); G.lineTo(x - s * 1.1, y + s * 0.8); G.closePath(); }
+  else star(x, y, s * 1.15, s * 0.5, 5);
+}
+
+const Cartoon = {
+  kind: "cartoon", lbl: "Watching", ttl: "Blobby, episode 4: Outside", dur: 15,
+  start() { this.t = 0; },
+  draw(dt) {
+    this.t += dt; const t = this.t;
+    G.fillStyle = "#8FD6FF"; G.fillRect(0, 0, 480, 360);
+    G.save(); G.translate(400, 70); G.rotate(t * 0.4); G.fillStyle = "#FFD23F";
+    for (let i = 0; i < 10; i++) { G.rotate(Math.PI / 5); G.fillRect(40, -4, 18, 8); }
+    G.restore();
+    G.fillStyle = "#FFD23F"; G.beginPath(); G.arc(400, 70, 34, 0, Math.PI * 2); G.fill();
+    G.fillStyle = "#6B3A10"; G.beginPath(); G.arc(389, 64, 4, 0, 7); G.arc(411, 64, 4, 0, 7); G.fill();
+    G.strokeStyle = "#6B3A10"; G.lineWidth = 3; G.beginPath(); G.arc(400, 74, 12, 0.2, Math.PI - 0.2); G.stroke();
+    G.fillStyle = "#fff";
+    for (let i = 0; i < 3; i++) { const cx = ((t * (14 + i * 6) + i * 180) % 620) - 80, cy = 50 + i * 38; G.beginPath(); G.arc(cx, cy, 20, 0, 7); G.arc(cx + 24, cy - 8, 24, 0, 7); G.arc(cx + 50, cy, 18, 0, 7); G.fill(); }
+    G.fillStyle = "#37A956"; G.beginPath(); G.ellipse(120, 380, 260, 120, 0, 0, 7); G.fill();
+    G.fillStyle = "#4CC96A"; G.beginPath(); G.ellipse(400, 395, 280, 120, 0, 0, 7); G.fill();
+    G.fillStyle = "#FF7EB6"; for (let i = 0; i < 6; i++) { G.beginPath(); G.arc(40 + i * 80, 318 + (i % 2) * 14, 6, 0, 7); G.fill(); }
+    const period = 1.1, ph = (t % period) / period, bx = 40 + ((t * 70) % 440);
+    const hgt = Math.sin(ph * Math.PI) * 90, ground = 300;
+    const squash = ph < 0.08 || ph > 0.92 ? 0.75 : 1;
+    const by = ground - hgt - 34 * squash;
+    G.fillStyle = "rgba(0,0,0,.15)"; G.beginPath(); G.ellipse(bx, ground + 4, 30 - hgt * 0.1, 7, 0, 0, 7); G.fill();
+    G.fillStyle = "#FF8A2A"; G.beginPath(); G.ellipse(bx, by, 36 / squash * 0.95, 34 * squash, 0, 0, 7); G.fill();
+    G.fillStyle = "#fff"; G.beginPath(); G.arc(bx - 11, by - 8, 9, 0, 7); G.arc(bx + 11, by - 8, 9, 0, 7); G.fill();
+    G.fillStyle = "#1B26A6"; G.beginPath(); G.arc(bx - 9, by - 7, 4.5, 0, 7); G.arc(bx + 13, by - 7, 4.5, 0, 7); G.fill();
+    G.strokeStyle = "#1B26A6"; G.lineWidth = 3; G.beginPath(); G.arc(bx + 1, by + 6, 9, 0.3, Math.PI - 0.3); G.stroke();
+    if (t < 2) {
+      G.fillStyle = "rgba(43,59,224," + Math.min(1, 2 - t) + ")"; G.fillRect(0, 0, 480, 360);
+      G.fillStyle = "rgba(255,210,63," + Math.min(1, 2 - t) + ")"; G.font = "800 64px 'Bricolage Grotesque', Arial"; G.textAlign = "center"; G.fillText("BLOBBY", 240, 175);
+      G.font = "600 20px 'Bricolage Grotesque', Arial"; G.fillStyle = "rgba(255,255,255," + Math.min(1, 2 - t) + ")"; G.fillText("episode 4: outside", 240, 210); G.textAlign = "left";
+    }
+    if (Math.random() < dt * 0.35) sendPulse(1, COL.mint);
+  }
+};
+
+const Sorter = {
+  kind: "game", lbl: "Playing", ttl: "Shape Sorter (every shape fits the square hole)", dur: 14,
+  start() { this.t = 0; this.shapes = ["star", "circle", "triangle"]; this.i = 0; this.done = 0; },
+  draw(dt) {
+    this.t += dt; const cyc = 5, lt = this.t % cyc, idx = Math.floor(this.t / cyc);
+    const kind = this.shapes[idx % 3];
+    G.fillStyle = "#FFE38A"; G.fillRect(0, 0, 480, 360);
+    G.fillStyle = "#E4483B"; rrect(40, 230, 400, 110, 16); G.fill();
+    G.fillStyle = "#B8322A"; G.fillRect(40, 230, 400, 14);
+    const holes = { circle: 95, triangle: 190, star: 290, square: 385 };
+    G.fillStyle = "#5A1410";
+    for (const k in holes) { shapePath(k, holes[k], 285, 22); G.fill(); }
+    const colors = { star: "#7B3FCC", circle: "#2F7FD9", triangle: "#3DB85A" };
+    const start = { x: 70, y: 70 }, right = { x: holes[kind], y: 190 }, sq = { x: holes.square, y: 190 };
+    let x, y, s = 20, alpha = 1;
+    const ease = q => q < 0.5 ? 2 * q * q : 1 - Math.pow(-2 * q + 2, 2) / 2;
+    if (lt < 1.4) { const q = ease(lt / 1.4); x = start.x + (right.x - start.x) * q; y = start.y + (right.y - start.y) * q; }
+    else if (lt < 2.3) { x = right.x + Math.sin(lt * 18) * 5; y = right.y; }
+    else if (lt < 3.3) { const q = ease((lt - 2.3) / 1); x = right.x + (sq.x - right.x) * q; y = right.y - Math.sin(q * Math.PI) * 40; }
+    else if (lt < 3.8) { const q = (lt - 3.3) / 0.5; x = sq.x; y = sq.y + q * 95; s = 20 * (1 - q * 0.4); alpha = 1 - q; }
+    else { x = sq.x; y = 400; alpha = 0; }
+    G.globalAlpha = alpha; G.fillStyle = colors[kind]; shapePath(kind, x, y, s); G.fill(); G.globalAlpha = 1;
+    if (lt > 1.5 && lt < 2.3) {
+      G.fillStyle = "#fff"; rrect(right.x + 22, right.y - 70, 44, 40, 12); G.fill();
+      G.fillStyle = "#1B26A6"; G.font = "800 28px 'Bricolage Grotesque', Arial"; G.fillText("?", right.x + 37, right.y - 40);
+    }
+    if (lt > 3.8) {
+      G.fillStyle = "#1B26A6"; G.font = "800 40px 'Bricolage Grotesque', Arial"; G.textAlign = "center";
+      G.fillText("SQUARE HOLE!", 240, 120); G.textAlign = "left";
+      if (this.done !== idx) { this.done = idx; feedLine(`<span class="ctx">${kind} → square hole. correct, probably</span>`); sendPulse(1, COL.gold); blip(740, 0.08, "triangle"); }
+    }
+    G.fillStyle = "#1B26A6"; G.font = "700 16px 'Bricolage Grotesque', Arial"; G.fillText("SHAPE SORTER", 16, 26);
+  }
+};
+
+const Runner = {
+  kind: "game", lbl: "Playing", ttl: "Jump Guy", dur: 15,
+  start() { this.reset(); this.over = 0; },
+  reset() { this.py = 0; this.vy = 0; this.obs = []; this.next = 1; this.score = 0; this.t = 0; },
+  draw(dt) {
+    this.t += dt;
+    G.fillStyle = "#C9F2FF"; G.fillRect(0, 0, 480, 360);
+    G.fillStyle = "#fff"; for (let i = 0; i < 3; i++) { const cx = 480 - ((this.t * 30 + i * 170) % 560); G.beginPath(); G.arc(cx, 60 + i * 30, 16, 0, 7); G.arc(cx + 20, 54 + i * 30, 20, 0, 7); G.fill(); }
+    G.fillStyle = "#4CC96A"; G.fillRect(0, 290, 480, 70);
+    G.fillStyle = "#37A956"; for (let i = 0; i < 12; i++) G.fillRect(((i * 50 - this.t * 180) % 600 + 600) % 600 - 60, 298, 22, 6);
+    if (this.over > 0) {
+      this.over -= dt;
+      G.fillStyle = "#1B26A6"; G.font = "800 46px 'Bricolage Grotesque', Arial"; G.textAlign = "center"; G.fillText("GAME OVER", 240, 150);
+      G.font = "600 20px 'Bricolage Grotesque', Arial"; G.fillText("score " + this.score + " · best " + stats.best, 240, 182); G.textAlign = "left";
+      this.drawGuy(90, 290 - 30, true);
+      if (this.over <= 0) this.reset();
+      return;
+    }
+    this.next -= dt;
+    if (this.next <= 0) { this.obs.push({ x: 500, h: ri(26, 46), trig: Math.random() < 0.22 ? ri(8, 26) : ri(55, 95), jumped: false, passed: false }); this.next = 0.9 + Math.random() * 0.9; }
+    for (const o of this.obs) {
+      o.x -= 190 * dt;
+      if (!o.jumped && o.x - 90 < o.trig && this.py === 0) { this.vy = 520; o.jumped = true; blip(420, 0.05, "square", 0.02); brainWave("B", new THREE.Vector3(rr(-0.6, 0.6), 0.5, 0.8)); }
+      if (!o.passed && o.x < 70) { o.passed = true; this.score++; if (this.score > stats.best) stats.best = this.score; }
+    }
+    this.obs = this.obs.filter(o => o.x > -40);
+    this.vy -= 1500 * dt; this.py = Math.max(0, this.py + this.vy * dt); if (this.py === 0) this.vy = 0;
+    G.fillStyle = "#FF7EB6"; for (const o of this.obs) { rrect(o.x - 11, 290 - o.h, 22, o.h, 5); G.fill(); }
+    const gy = 290 - 30 - this.py;
+    for (const o of this.obs) if (Math.abs(o.x - 90) < 24 && 290 - this.py - 2 > 290 - o.h) {
+      this.over = 1.6; stats.lost++; $("#sLost").textContent = stats.lost;
+      feedLine(`<span class="ctx">jump guy: lost at ${this.score}. again.</span>`); thoughtBubble("game over again", "pink"); blip(180, 0.25, "sawtooth", 0.03);
+    }
+    this.drawGuy(90, gy, false);
+    G.fillStyle = "#1B26A6"; G.font = "700 18px 'Bricolage Grotesque', Arial"; G.fillText("JUMP GUY", 16, 28); G.fillText("score " + this.score, 380, 28);
+  },
+  drawGuy(x, y, dead) {
+    G.fillStyle = "#3DE08A"; rrect(x - 16, y, 32, 30, 7); G.fill();
+    G.fillStyle = "#1B26A6";
+    if (dead) { G.font = "800 12px Arial"; G.fillText("x x", x - 9, y + 15); }
+    else { G.fillRect(x - 7, y + 8, 4, 6); G.fillRect(x + 5, y + 8, 4, 6); G.fillRect(x - 5, y + 20, 12, 3); }
+  }
+};
+
+const ARTICLES = [
+  { t: "Buy My Book", s: "BUY MY BOOK. A practical field guide to building through every market cycle, staying focused and turning ideas into products.", img: "book" },
+  { t: "Build mode", s: "Build mode means focusing on useful products, resilient systems and the next iteration instead of short-term noise.", img: "brain" },
+  { t: "Brain", s: "The brain is the organ that controls thought, memory and movement. Results may vary between individuals.", img: "brain" },
+  { t: "Candlestick chart", s: "A candlestick chart shows the open, high, low and close of a price over a period of time.", img: "candles" },
+  { t: "Why is the sky blue", s: "Sunlight is scattered by air molecules, and blue light is scattered the most. That is why the sky looks blue.", img: "sky" }
+];
+const Wiki = {
+  kind: "wiki", lbl: "Reading", ttl: "Wikipedia", dur: 11,
+  start() { this.t = 0; this.a = ARTICLES[0]; this.switched = false; this.count(); },
+  count() { stats.read++; $("#sRead").textContent = stats.read; feedLine(`<span class="ctx">opened wikipedia: “${this.a.t}”</span>`); thoughtBubble("reading: " + this.a.t.toLowerCase(), "mint"); setNP(this.lbl, "Wikipedia: " + this.a.t); },
+  draw(dt) {
+    this.t += dt;
+    if (!this.switched && this.a.img !== "book" && this.t > 5.6) { this.switched = true; let n; do { n = ARTICLES[Math.floor(Math.random() * ARTICLES.length)]; } while (n === this.a); this.a = n; this.count(); sendPulse(1, COL.mint); }
+    const scroll = Math.min(60, ((this.t % 5.6) / 5.6) * 80);
+    G.fillStyle = "#fff"; G.fillRect(0, 0, 480, 360);
+    G.save(); G.translate(0, -scroll);
+    G.fillStyle = "#222"; G.font = "400 30px Georgia, 'Times New Roman', serif"; G.fillText(this.a.t, 20, 88);
+    G.fillStyle = "#c8ccd1"; G.fillRect(20, 98, 440, 1);
+    G.fillStyle = "#54595d"; G.font = "italic 12px Georgia, serif"; G.fillText("From Wikipedia, the free encyclopedia", 20, 116);
+    G.fillStyle = "#202122"; G.font = "15px Georgia, serif"; const endY = wrap(this.a.s, 20, 146, 290, 21);
+    G.fillStyle = "#eaecf0"; for (let i = 0; i < 9; i++) G.fillRect(20, endY + 26 + i * 18, i % 4 === 3 ? 180 : 290, 9);
+    G.fillStyle = "#f8f9fa"; G.fillRect(326, 130, 134, 150); G.strokeStyle = "#c8ccd1"; G.strokeRect(326, 130, 134, 150);
+    this.pic(393, 196);
+    G.fillStyle = "#eaecf0"; G.fillRect(336, 250, 110, 7); G.fillRect(336, 262, 80, 7);
+    G.restore();
+    G.fillStyle = "#f1f3f5"; G.fillRect(0, 0, 480, 44);
+    G.fillStyle = "#fff"; rrect(12, 9, 456, 26, 13); G.fill(); G.strokeStyle = "#d0d4d9"; G.stroke();
+    G.fillStyle = "#54595d"; G.font = "13px Arial"; G.fillText("en.wikipedia.org/wiki/" + this.a.t.replace(/ /g, "_"), 26, 27);
+    const cx = 200 + Math.sin(this.t * 0.9) * 60, cy = 200 + Math.cos(this.t * 0.7) * 40;
+    G.fillStyle = "#111"; G.beginPath(); G.moveTo(cx, cy); G.lineTo(cx, cy + 18); G.lineTo(cx + 5, cy + 13); G.lineTo(cx + 12, cy + 13); G.closePath(); G.fill();
+  },
+  pic(x, y) {
+    const k = this.a.img;
+    if (k === "book") {
+      // ZBRAIN book cover replaces the former facial-hair article thumbnail.
+      G.fillStyle = "#1B26A6"; G.fillRect(x - 47, y - 58, 94, 116);
+      G.fillStyle = "#FF7EB6"; G.fillRect(x - 39, y - 58, 86, 116);
+      G.fillStyle = "#FFD23F"; G.fillRect(x - 39, y - 58, 7, 116); G.strokeStyle = "#FFD23F"; G.lineWidth = 3; G.strokeRect(x - 39, y - 58, 86, 116);
+      G.fillStyle = "#1B26A6"; G.font = "800 13px 'Bricolage Grotesque', Arial"; G.textAlign = "center";
+      G.fillText("BUY MY BOOK", x + 4, y - 25);
+      G.fillStyle = "#FFF3B0"; G.font = "700 10px 'Bricolage Grotesque', Arial"; G.fillText("BY ZBRAIN", x + 4, y + 36);
+      G.fillStyle = "#1B26A6"; G.beginPath(); G.arc(x + 4, y + 2, 17, 0, Math.PI * 2); G.fill();
+      G.fillStyle = "#FF7EB6"; for (let i = 0; i < 18; i++) { const a = i * 2.4, r = 4 + (i % 4) * 3; G.beginPath(); G.arc(x + 4 + Math.cos(a) * r, y + 2 + Math.sin(a) * r, 1.8, 0, Math.PI * 2); G.fill(); }
+      G.textAlign = "left";
+    }
+    else if (k === "build") { G.fillStyle = "#FFD23F"; G.beginPath(); G.arc(x, y + 10, 46, Math.PI, 0); G.lineTo(x + 46, y + 30); G.lineTo(x - 46, y + 30); G.fill(); G.fillStyle = "#f8f9fa"; G.fillRect(x - 28, y + 6, 56, 30); }
+    else if (k === "brain") { G.fillStyle = "#FF7EB6"; G.beginPath(); G.ellipse(x - 18, y, 26, 34, 0, 0, 7); G.ellipse(x + 18, y, 26, 34, 0, 0, 7); G.fill(); G.strokeStyle = "#B23C9F"; G.lineWidth = 3; for (let i = 0; i < 4; i++) { G.beginPath(); G.arc(x - 18, y - 20 + i * 13, 12, 0.3, 2.8); G.stroke(); G.beginPath(); G.arc(x + 18, y - 20 + i * 13, 12, 0.3, 2.8); G.stroke(); } }
+    else if (k === "candles") { const hs = [20, 34, 26, 48]; for (let i = 0; i < 4; i++) { G.fillStyle = i === 2 ? "#E4483B" : "#3DB85A"; G.fillRect(x - 44 + i * 26, y + 20 - hs[i], 14, hs[i]); G.fillRect(x - 38 + i * 26, y + 10 - hs[i], 2, hs[i] + 20); } }
+    else { G.fillStyle = "#8FD6FF"; G.fillRect(x - 56, y - 50, 112, 100); G.fillStyle = "#FFD23F"; G.beginPath(); G.arc(x + 30, y - 22, 14, 0, 7); G.fill(); }
+  }
+};
+
+const PROGRAMS = [Cartoon, Sorter, Runner, Wiki];
+let prog = null, progT = 0, switching = 0, screenOn = 0;
+function setNP(l, t) { $("#npLbl").textContent = l; $("#npTtl").textContent = t; }
+function pickProgram() {
+  let p; do { const r = Math.random(); p = r < 0.34 ? Cartoon : r < 0.6 ? Sorter : r < 0.86 ? Runner : Wiki; } while (p === prog);
+  return p;
+}
+function runProgram(p, reason) {
+  switching = 0.45; staticNoise();
+  setTimeout(() => {
+    prog = p; progT = 0; prog.start();
+    if (prog !== Wiki) setNP(prog.lbl, prog.ttl);
+    const ctx = { cartoon: "channel: cartoons (again)", game: "opened a kids game", wiki: "" }[prog.kind];
+    if (ctx) { feedLine(`<span class="ctx">${ctx}${reason === "user" ? ", as requested" : ""}</span>`); thoughtBubble(prog.kind === "cartoon" ? "cartoons!!" : "game time", "gold"); }
+    const m = { cartoon: [28, 96, 3], game: [72, 35, 2], wiki: [55, 12, 90] }[prog.kind];
+    meters.think = m[0]; meters.cartoon = m[1]; meters.read = m[2]; setMeters();
+    headMat.uniforms.uAct.value = prog.kind === "game" ? 0.9 : prog.kind === "wiki" ? 0.6 : 0.25;
+  }, 450);
+  sendPulse(-1, COL.gold); brainWave("A", new THREE.Vector3(0, 0.4, 0.9));
+}
+function drawScreen(dt) {
+  if (switching > 0) {
+    switching -= dt;
+    const img = G.createImageData(160, 120);
+    for (let i = 0; i < img.data.length; i += 4) { const v = Math.random() * 255; img.data[i] = v; img.data[i + 1] = v; img.data[i + 2] = v * 1.1; img.data[i + 3] = 255; }
+    const tmp = drawScreen.tmp || (drawScreen.tmp = document.createElement("canvas")); tmp.width = 160; tmp.height = 120; tmp.getContext("2d").putImageData(img, 0, 0);
+    G.imageSmoothingEnabled = false; G.drawImage(tmp, 0, 0, 480, 360); G.imageSmoothingEnabled = true;
+  } else if (prog) {
+    progT += dt; prog.draw(dt);
+    if (progT > prog.dur) runProgram(pickProgram());
+  } else { G.fillStyle = "#111a7a"; G.fillRect(0, 0, 480, 360); }
+  G.fillStyle = "rgba(0,0,30,0.10)"; for (let y = 0; y < 360; y += 3) G.fillRect(0, y, 480, 1);
+  if (screenOn < 1) { G.fillStyle = "#000"; const h = 360 * (1 - screenOn) / 2; G.fillRect(0, 0, 480, h); G.fillRect(0, 360 - h, 480, h); }
+  scrTex.needsUpdate = true;
+}
+
+/* ================= INTERACTION ================= */
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+let dragging = false, downX = 0, downY = 0, lastX = 0, lastY = 0, moved = 0, lastInteract = -99, hinted = false;
+const rot = { y: 0, x: 0, vy: 0, ty: 0, tx: 0 };
+const canvas = $("#scene");
+const bSphere = new THREE.Sphere();
+function setMouse(e) { mouse.x = e.clientX / W * 2 - 1; mouse.y = -(e.clientY / H) * 2 + 1; ray.setFromCamera(mouse, camera); }
+function brainHit() {
+  brainGroup.updateMatrixWorld(); bSphere.center.set(0, 0.1, 0).applyMatrix4(brainGroup.matrixWorld); bSphere.radius = 1.45 * stageScale;
+  return ray.ray.intersectSphere(bSphere, new THREE.Vector3());
+}
+function screenHit() { return ray.intersectObject(screen).length > 0; }
+function hideHint() { if (!hinted) { hinted = true; $("#hint").classList.add("gone"); } }
+canvas.addEventListener("pointerdown", e => {
+  setMouse(e); downX = lastX = e.clientX; downY = lastY = e.clientY; moved = 0;
+  if (brainHit()) { dragging = true; canvas.classList.add("dragging"); canvas.setPointerCapture(e.pointerId); }
+});
+canvas.addEventListener("pointermove", e => {
+  setMouse(e);
+  if (dragging) {
+    const dx = e.clientX - lastX, dy = e.clientY - lastY; moved += Math.abs(dx) + Math.abs(dy);
+    rot.ty += dx * 0.009; rot.tx = Math.max(-0.45, Math.min(0.45, rot.tx + dy * 0.004)); rot.vy = dx * 0.009;
+    lastX = e.clientX; lastY = e.clientY; lastInteract = time; if (moved > 20) hideHint();
+  } else {
+    canvas.classList.toggle("on-brain", !!brainHit());
+    canvas.classList.toggle("on-screen", !brainHit() && screenHit());
+  }
+});
+canvas.addEventListener("pointerup", e => {
+  setMouse(e);
+  const click = Math.hypot(e.clientX - downX, e.clientY - downY) < 7;
+  if (dragging) { dragging = false; canvas.classList.remove("dragging"); }
+  if (!click) return;
+  const hit = brainHit();
+  if (hit) { const local = brainGroup.worldToLocal(hit.clone()); brainWave("A", local); think(true); lastInteract = time; hideHint(); }
+  else if (screenHit()) { runProgram(pickProgram(), "user"); hideHint(); }
+});
+canvas.addEventListener("pointerleave", () => canvas.classList.remove("on-brain", "on-screen"));
+$("#thinkBtn").addEventListener("click", () => { think(true); hideHint(); });
+$("#chanBtn").addEventListener("click", () => runProgram(pickProgram(), "user"));
+
+/* ================= PAGES ================= */
+const page = $("#page");
+let current = "home";
+function openPage(name) {
+  document.querySelectorAll(".links a").forEach(a => a.setAttribute("aria-current", a.dataset.nav === name ? "page" : "false"));
+  $("#links").classList.remove("open"); $("#burger").setAttribute("aria-expanded", "false");
+  if (name === "home" || !["how", "about", "token"].includes(name)) {
+    if (current !== "home") {
+      if (hasGsap) gsap.to(page, { x: "calc(100% + 40px)", duration: REDUCED ? 0 : 0.5, ease: "power3.in", onComplete: () => page.classList.remove("open") });
+      else page.classList.remove("open");
+      tween(pageState, { shift: 0, duration: REDUCED ? 0 : 0.8, ease: "power3.inOut", onUpdate: applyShift });
+      if (hasGsap) gsap.to(["#intro", "#monitor"], { autoAlpha: 1, duration: 0.4, delay: 0.2 });
+    }
+    current = "home"; return;
+  }
+  page.querySelectorAll("section").forEach(s => s.classList.toggle("active", s.dataset.page === name));
+  page.querySelector(".page-inner").scrollTop = 0; page.scrollTop = 0;
+  const h = page.querySelector("section.active h2"); page.setAttribute("aria-labelledby", h.id || (h.id = "t_" + name));
+  if (current === "home") {
+    page.classList.add("open");
+    if (hasGsap) gsap.fromTo(page, { x: "calc(100% + 40px)" }, { x: 0, duration: REDUCED ? 0 : 0.7, ease: "power3.out" });
+    else page.style.transform = "none";
+    tween(pageState, { shift: 1, duration: REDUCED ? 0 : 0.9, ease: "power3.inOut", onUpdate: applyShift });
+    if (hasGsap && W >= 760) gsap.to(["#intro", "#monitor"], { autoAlpha: 0, duration: 0.3 });
+  }
+  current = name; page.focus({ preventScroll: true });
+  brainWave("A", new THREE.Vector3(0, 0.6, 0.6));
+}
+function route() { openPage((location.hash || "#").slice(1) || "home"); }
+window.addEventListener("hashchange", route);
+document.querySelectorAll('[data-nav="home"]').forEach(a => a.addEventListener("click", e => { e.preventDefault(); history.pushState(null, "", location.pathname + location.search); openPage("home"); }));
+$("#closePage").addEventListener("click", () => { history.pushState(null, "", location.pathname + location.search); openPage("home"); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && current !== "home") { history.pushState(null, "", location.pathname + location.search); openPage("home"); } });
+
+/* ================= UPLOAD CHOREOGRAPHY ================= */
+function assemble(dur) {
+  headMat.uniforms.uAssemble.value = 0; compMat.uniforms.uAssemble.value = 0; cableReveal = 0; screenOn = 0; screenMat.opacity = 0;
+  if (!hasGsap || REDUCED) { headMat.uniforms.uAssemble.value = 1; compMat.uniforms.uAssemble.value = 1; cableReveal = 1; screenOn = 1; screenMat.opacity = 1; return; }
+  const tl = gsap.timeline();
+  tl.to(headMat.uniforms.uAssemble, { value: 1, duration: dur, ease: "power2.inOut" })
+    .to(compMat.uniforms.uAssemble, { value: 1, duration: dur * 0.7, ease: "power2.inOut" }, dur * 0.25)
+    .to({ v: 0 }, { v: 1, duration: 0.9, ease: "power2.inOut", onUpdate() { cableReveal = this.targets()[0].v; } }, dur * 0.85)
+    .to(screenMat, { opacity: 1, duration: 0.2 }, dur * 0.85 + 0.8)
+    .to({ v: 0 }, { v: 1, duration: 0.5, ease: "power4.out", onUpdate() { screenOn = this.targets()[0].v; } }, "<")
+    .add(() => { brainWave("A", new THREE.Vector3(0, 0.3, 0.8)); thoughtBubble("hello?", "gold"); blip(880, 0.1); }, dur * 0.9)
+    .add(() => thoughtBubble("i can do math", ""), dur + 1.6)
+    .add(() => think(false), dur + 3.1);
+  return tl;
+}
+$("#replayBtn").addEventListener("click", () => {
+  history.pushState(null, "", location.pathname + location.search); openPage("home");
+  feedLine('<span class="ctx">re-uploading ZBRAIN…</span>');
+  setTimeout(() => {
+    if (!hasGsap || REDUCED) return;
+    gsap.to(headMat.uniforms.uAssemble, { value: 0, duration: 1.1, ease: "power2.in", onComplete: () => {
+      gsap.to(headMat.uniforms.uAssemble, { value: 1, duration: 3, ease: "power2.inOut" });
+      setTimeout(() => { brainWave("A", new THREE.Vector3(0, 0.3, 0.8)); thoughtBubble("i’m back", "gold"); }, 2600);
+    } });
+  }, 500);
+});
+
+function preload() {
+  const steps = [["Mapping public signals", "done"], ["Removing duplicate opinions", "1 left"], ["Trimming the buzz cut", "done"], ["Fitting CZ glasses", "done"], ["Booting cartoon cortex", "done"]];
+  const list = $("#preList"), bar = $("#preBar");
+  if (REDUCED || !hasGsap) { $("#pre").remove(); start(); return; }
+  let i = 0;
+  const next = () => {
+    if (i < steps.length) {
+      const li = document.createElement("li"); li.innerHTML = `${steps[i][0]} … <span>${steps[i][1]}</span>`; list.appendChild(li);
+      i++; bar.style.width = (i / steps.length * 100) + "%"; setTimeout(next, 330);
+    } else {
+      gsap.to("#pre", { autoAlpha: 0, duration: 0.6, ease: "power2.out", onComplete: () => $("#pre").remove() });
+      start();
+    }
+  };
+  next();
+}
+function start() {
+  assemble(3.2);
+  ['upload complete', 'neurons online: ' + $("#sNeurons").textContent, 'CZ glasses: fitted', 'buzz cut: ready'].forEach((t, i) => setTimeout(() => feedLine(`<span class="ctx">${t}</span>`), REDUCED ? 0 : 900 + i * 450));
+  if (hasGsap && !REDUCED) {
+    gsap.set([".intro", ".monitor", ".nowplaying", ".nav", ".marquee"], { autoAlpha: 0 });
+    gsap.set(".intro", { y: 16 });
+    const tl = gsap.timeline({ delay: 1.2 });
+    tl.to(".nav", { autoAlpha: 1, duration: 0.5 })
+      .to(".intro", { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, "-=0.2")
+      .to(".marquee", { autoAlpha: 1, duration: 0.5 }, 2.4)
+      .to(".monitor", { autoAlpha: 1, duration: 0.5 }, 2.6)
+      .to(".nowplaying", { autoAlpha: 1, duration: 0.5 }, 3.2);
+  }
+  setTimeout(() => runProgram(Cartoon), REDUCED ? 0 : 3900);
+  setMeters();
+  route();
+}
+
+/* ambient thinking */
+let ambient = 3;
+function ambientTick(dt) {
+  ambient -= dt;
+  if (ambient <= 0) {
+    ambient = 2.4 + Math.random() * 2.2;
+    const r = Math.random();
+    if (r < 0.62) think(false);
+    else if (r < 0.8) feedLine(`<span class="ctx">${JOKES[Math.floor(Math.random() * JOKES.length)]}</span>`);
+    else if (prog && prog.kind === "cartoon") feedLine(`<span class="ctx">${["blobby went left", "why is the sun smiling", "counting clouds: 3", "blobby bounced. good."][Math.floor(Math.random() * 4)]}</span>`);
+    else think(false);
+    meters.think = Math.max(5, Math.min(98, meters.think + ri(-8, 8))); setMeters();
+  }
+}
+
+/* ================= LOOP ================= */
+const clock = new THREE.Clock();
+let screenAcc = 0;
+function frame() {
+  const dt = Math.min(0.05, clock.getDelta()); time += dt;
+  [headMat, compMat, cableMat, pulseMat].forEach(m => m.uniforms.uTime.value = time);
+  if (!dragging) {
+    rot.ty += rot.vy; rot.vy *= 0.92;
+    if (time - lastInteract > 3) { rot.ty += (Math.round(rot.ty / (Math.PI * 2)) * Math.PI * 2 - rot.ty) * 0.02; rot.tx *= 0.97; }
+  }
+  const idle = REDUCED ? 0 : Math.sin(time * 0.35) * 0.18;
+  rot.y += (rot.ty + idle - rot.y) * 0.12; rot.x += (rot.tx - rot.x) * 0.12;
+  brainGroup.rotation.y = rot.y; brainGroup.rotation.x = rot.x + (REDUCED ? 0 : Math.sin(time * 0.5) * 0.03);
+  if (!REDUCED) brainGroup.position.y += (brainBaseY + Math.sin(time * 0.8) * 0.04 - brainGroup.position.y) * 0.1;
+  headMat.uniforms.uSway.value = REDUCED ? 0 : 1;
+  const ca = Math.min(1, Math.max(0, (headMat.uniforms.uAssemble.value - 0.82) / 0.18));
+  coreMats.forEach(m => m.opacity = ca * (m.userData.maxOpacity || 1));
+  updateCable(time);
+  cableGeo.setDrawRange(0, Math.floor(CABLE_N * cableReveal));
+  updatePulses(dt);
+  screenAcc += dt;
+  if (screenAcc > 1 / 30) { drawScreen(screenAcc); screenAcc = 0; }
+  primeStep();
+  if (prog) ambientTick(dt);
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+preload();
+})();
+</script>
+</body>
+</html>
