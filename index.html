@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ZBRAIN — Changpeng Zhao Brain</title>
-<meta name="description" content="ZBRAIN is a playful point-cloud simulation of Changpeng Zhao’s brain, running live in your browser.">
-<meta property="og:title" content="ZBRAIN — Changpeng Zhao Brain">
-<meta property="og:description" content="A playful point-cloud simulation inspired by Changpeng Zhao’s public persona.">
+<title>ZBRAIN</title>
+<meta name="description" content="ZBRAIN 是一个在浏览器中实时运行、灵感来自赵长鹏公众形象的趣味点云大脑模拟。">
+<meta property="og:title" content="ZBRAIN">
+<meta property="og:description" content="一个灵感来自赵长鹏公众形象的趣味点云模拟。">
 <meta property="og:image" content="assets/brand/zbrain-logo-master.png?v=1">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#2B3BE0">
@@ -66,7 +66,7 @@ button{font:inherit;color:inherit}
 .intro p{margin:0 0 16px;font-size:16px;line-height:1.4;color:var(--cream);max-width:32ch}
 .intro .row{display:flex;gap:10px;flex-wrap:wrap}
 
-.monitor{position:absolute;left:24px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 18px);width:min(360px,36vw);background:rgba(17,26,140,.55);border:2px dotted rgba(255,243,176,.75);border-radius:18px;padding:14px 16px 12px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.monitor{position:absolute;left:170px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 18px);width:min(360px,36vw);background:rgba(17,26,140,.55);border:2px dotted rgba(255,243,176,.75);border-radius:18px;padding:14px 16px 12px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .monitor h2{margin:0 0 8px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
 .monitor h2 .dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 3px rgba(61,224,138,.25)}
 .feed{list-style:none;margin:0 0 10px;padding:0;font-family:var(--mono);font-size:12.5px;line-height:1.55;height:calc(1.55em * 6);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
@@ -168,7 +168,7 @@ button{font:inherit;color:inherit}
   .monitor .meters,.monitor .stats,.monitor small{display:none}
   .feed{height:calc(1.55em * 2);margin:0;font-size:12px}
   .monitor h2{font-size:13px;margin-bottom:4px}
-  .nowplaying{left:12px;right:12px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 10px);border-radius:16px}
+  .nowplaying{left:12px;right:70px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 10px);min-width:0}
   .nowplaying .ttl{max-width:none}
   .nowplaying > div{flex:1;min-width:0}
   .hint{display:none}
@@ -176,6 +176,12 @@ button{font:inherit;color:inherit}
   .page-inner{padding:22px 20px 28px}
   .bigtype span{font-size:min(30vw,22vh)}
 }
+#languageToggle{position:fixed;left:542px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 14px);z-index:8;min-width:48px;height:40px;justify-content:center;background:rgba(17,26,140,.86);border-color:var(--cream);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#languageToggle:hover{background:var(--cobalt-deep)}
+html[lang="zh-CN"] body{font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",var(--display)}
+html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",var(--mono)}
+@media (max-width:760px){#languageToggle{left:auto;right:12px;bottom:calc(var(--marq-h) + env(safe-area-inset-bottom,0px) + 10px);height:38px;min-width:46px;padding:0 10px}}
+@media (max-height:700px) and (min-width:761px){.intro .row .ghost{display:none}}
 @media (prefers-reduced-motion: reduce){
   .marquee .track{animation:none}
   .btn{transition:none}
@@ -187,132 +193,134 @@ button{font:inherit;color:inherit}
 
 <div class="pre" id="pre" aria-live="polite">
   <div class="pre-box">
-    <h2>Uploading ZBRAIN…</h2>
+    <h2 data-i18n="loaderTitle">正在上传 ZBRAIN…</h2>
     <ul id="preList"></ul>
     <div class="pre-bar" aria-hidden="true"><i id="preBar"></i></div>
   </div>
 </div>
 
 <div class="bigtype" aria-hidden="true"><span>ZBRAIN</span><span>CZ BRAIN.</span></div>
-<canvas id="scene" aria-label="Changpeng Zhao's ZBRAIN, made of dots and wired to an old computer. Drag to spin it, click it to make it think." role="img"></canvas>
-<div class="fallback"><img src="assets/brand/zbrain-logo-master.png?v=1" alt="ZBRAIN character logo"></div>
+<canvas id="scene" data-i18n-aria="sceneAria" aria-label="赵长鹏的 ZBRAIN，由点云构成并连接到一台老式电脑。拖动可旋转，点击可让它思考。" role="img"></canvas>
+<div class="fallback"><img src="assets/brand/zbrain-logo-master.png?v=1" data-i18n-alt="characterLogoAlt" alt="ZBRAIN 角色标志"></div>
 <div id="thoughts" aria-hidden="true"></div>
 
 <header class="nav">
-  <a class="brand" href="#" data-nav="home"><img src="assets/brand/zbrain-logo.png?v=1" alt="ZBRAIN logo">ZBRAIN</a>
-  <nav class="links" id="links" aria-label="Main">
-    <a href="#" data-nav="home" aria-current="page">Brain</a>
-    <a href="#how" data-nav="how">How it works</a>
-    <a href="#about" data-nav="about">About</a>
-    <a href="#token" data-nav="token">Token</a>
+  <a class="brand" href="#" data-nav="home"><img src="assets/brand/zbrain-logo.png?v=1" data-i18n-alt="brandLogoAlt" alt="ZBRAIN 标志">ZBRAIN</a>
+  <nav class="links" id="links" data-i18n-aria="mainNavAria" aria-label="主导航">
+    <a href="#" data-nav="home" aria-current="page" data-i18n="navBrain">大脑</a>
+    <a href="#how" data-nav="how" data-i18n="navHow">工作原理</a>
+    <a href="#about" data-nav="about" data-i18n="navAbout">关于</a>
+    <a href="#token" data-nav="token" data-i18n="navToken">代币</a>
   </nav>
-  <button class="iconbtn" id="soundBtn" aria-pressed="false" aria-label="Sound">
+  <button class="iconbtn" id="soundBtn" aria-pressed="false" data-i18n-aria="soundAria" aria-label="声音">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="sndWave" d="M16.5 8.5a5 5 0 0 1 0 7" opacity=".25"/></svg>
-    <span id="soundLbl">Sound off</span>
+    <span id="soundLbl">声音：关</span>
   </button>
-  <a class="btn buy" href="#token" data-nav="token">Buy <span class="tk">$ZBRAIN</span></a>
-  <button class="iconbtn burger" id="burger" aria-expanded="false" aria-controls="links">Menu</button>
+  <a class="btn buy" href="#token" data-nav="token"><span data-i18n="buy">购买</span> <span class="tk">$ZBRAIN</span></a>
+  <button class="iconbtn burger" id="burger" aria-expanded="false" aria-controls="links" data-i18n="menu">菜单</button>
 </header>
 
 <main class="hud" id="hud">
   <div class="intro" id="intro">
-    <h1>Changpeng Zhao's brain, running live.</h1>
-    <p>ZBRAIN turns CZ’s public builder energy into a living point-cloud brain. It calculates, watches markets and never stops building.</p>
+    <h1 data-i18n="heroTitle">赵长鹏的大脑，实时运行中。</h1>
+    <p data-i18n="heroBody">ZBRAIN 将 CZ 公开展现的建设者能量化为一个鲜活的点云大脑。它不断计算、观察市场，并持续构建。</p>
     <div class="row">
-      <button class="btn" id="thinkBtn">Make it think</button>
-      <a class="btn ghost" href="#how" data-nav="how">How it works</a>
+      <button class="btn" id="thinkBtn" data-i18n="makeThink">让它思考</button>
+      <a class="btn ghost" href="#how" data-nav="how" data-i18n="navHow">工作原理</a>
     </div>
   </div>
 
-  <section class="monitor" id="monitor" aria-label="Brain monitor">
-    <h2><span class="dot"></span>Brain monitor</h2>
+  <section class="monitor" id="monitor" data-i18n-aria="brainMonitor" aria-label="大脑监视器">
+    <h2><span class="dot"></span><span data-i18n="brainMonitor">大脑监视器</span></h2>
     <ul class="feed" id="feed" aria-live="off"></ul>
     <div class="meters">
-      <span>Thinking</span><div class="meter"><i id="mThink"></i></div>
-      <span>Cartoon cortex</span><div class="meter pink"><i id="mCartoon"></i></div>
-      <span>Reading</span><div class="meter mint"><i id="mRead"></i></div>
+      <span data-i18n="thinking">思考</span><div class="meter"><i id="mThink"></i></div>
+      <span data-i18n="cartoonCortex">卡通皮层</span><div class="meter pink"><i id="mCartoon"></i></div>
+      <span data-i18n="reading">阅读</span><div class="meter mint"><i id="mRead"></i></div>
     </div>
     <div class="stats">
-      <span>Neurons on screen</span><b id="sNeurons">0</b>
-      <span>Primes found</span><b id="sPrimes">0</b>
-      <span>Games lost</span><b id="sLost">0</b>
-      <span>Articles read</span><b id="sRead">0</b>
+      <span data-i18n="neuronsScreen">屏幕神经元</span><b id="sNeurons">0</b>
+      <span data-i18n="primesFound">已发现质数</span><b id="sPrimes">0</b>
+      <span data-i18n="gamesLost">游戏失败</span><b id="sLost">0</b>
+      <span data-i18n="articlesRead">已读文章</span><b id="sRead">0</b>
     </div>
-    <small>Simulated in your browser. The math is real.</small>
+    <small data-i18n="simulationNote">在你的浏览器中模拟，数学计算是真实的。</small>
   </section>
 
   <div class="nowplaying" id="nowplaying">
-    <div><div class="lbl" id="npLbl">Booting</div><div class="ttl" id="npTtl">Cartoon cortex</div></div>
-    <button class="btn pink" id="chanBtn">Change channel</button>
+    <div><div class="lbl" id="npLbl">启动中</div><div class="ttl" id="npTtl">卡通皮层</div></div>
+    <button class="btn pink" id="chanBtn" data-i18n="changeChannel">切换频道</button>
   </div>
 
-  <div class="hint" id="hint">Drag to spin him. Click his brain to make him think.</div>
+  <div class="hint" id="hint" data-i18n="hint">拖动即可旋转。点击大脑让它思考。</div>
 </main>
+
+<button class="iconbtn language-toggle" id="languageToggle" type="button" aria-label="Switch to English">EN</button>
 
 <div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
 
 <aside class="page" id="page" role="dialog" aria-modal="false" aria-labelledby="pageTitle" tabindex="-1">
   <div class="page-inner">
-    <button class="iconbtn close" id="closePage" aria-label="Close and go back to the brain">Close</button>
+    <button class="iconbtn close" id="closePage" data-i18n="close" data-i18n-aria="closeAria" aria-label="关闭并返回大脑">关闭</button>
 
     <section data-page="how">
-      <h2 id="pageTitle">How we made his brain</h2>
+      <h2 id="pageTitle" data-i18n="howTitle">我们如何构建这个大脑</h2>
       <ol class="steps">
-        <li><b>We mapped the public signal</b>Builder quotes, crypto history, market cycles and the ideas associated with CZ’s public persona.</li>
-        <li><b>We compressed the noise</b>Only the strongest signals remained: build, learn, adapt and keep moving.</li>
-        <li><b>We turned it into neurons</b>Each dot is one tiny signal. Together they form the animated ZBRAIN character.</li>
-        <li><b>We plugged it into a computer</b>Then we let it do whatever it wanted. It chose cartoons.</li>
+        <li data-i18n-html="howStep1"><b>我们映射了公开信号</b>建设者语录、加密行业历史、市场周期，以及与 CZ 公众形象相关的理念。</li>
+        <li data-i18n-html="howStep2"><b>我们压缩了噪声</b>只保留最强的信号：构建、学习、适应并持续前进。</li>
+        <li data-i18n-html="howStep3"><b>我们把它变成神经元</b>每个点都是一个微小信号，共同组成动画化的 ZBRAIN 角色。</li>
+        <li data-i18n-html="howStep4"><b>我们把它接入电脑</b>然后让它自由行动。它选择了卡通片。</li>
       </ol>
-      <div class="row"><button class="btn" id="replayBtn">Replay the upload</button></div>
-      <h3>What the brain does all day</h3>
+      <div class="row"><button class="btn" id="replayBtn" data-i18n="replayUpload">重新播放上传过程</button></div>
+      <h3 data-i18n="allDayTitle">这个大脑整天都在做什么</h3>
       <ul class="does">
-        <li>Does arithmetic, for real. Sometimes gets it wrong first, then fixes it.</li>
-        <li>Hunts for prime numbers in the background and never stops.</li>
-        <li>Watches kids’ cartoons over and over.</li>
-        <li>Plays kids’ games. Loses a lot. Puts every shape in the square hole.</li>
-        <li>Sometimes opens Wikipedia and reads one paragraph.</li>
+        <li data-i18n="does1">真的进行算术运算。有时第一次会算错，然后自行修正。</li>
+        <li data-i18n="does2">持续在后台寻找质数，从不停歇。</li>
+        <li data-i18n="does3">一遍又一遍地看儿童卡通片。</li>
+        <li data-i18n="does4">玩儿童游戏，经常失败，还把所有形状都塞进方形孔。</li>
+        <li data-i18n="does5">偶尔打开维基百科，读上一段。</li>
       </ul>
-      <p class="fine">ZBRAIN is an unaffiliated parody simulation inspired by public culture. No private data is used. Everything runs in your browser.</p>
+      <p class="fine" data-i18n="disclaimer">ZBRAIN 是受公共文化启发的非关联戏仿模拟，不使用任何私人数据，所有内容均在你的浏览器中运行。</p>
     </section>
 
     <section data-page="about">
-      <h2>Meet ZBRAIN</h2>
-      <img class="portrait" src="assets/brand/zbrain-logo.png?v=1" alt="ZBRAIN point-cloud character">
-      <p>ZBRAIN is a stylized point-cloud interpretation of Changpeng Zhao: close-cropped dark hair, a natural V hairline, rectangular glasses and a focused stare.</p>
-      <p>Built around the idea of relentless execution, it turns public crypto culture into a playful animated brain.</p>
-      <p>So we created ZBRAIN. <strong>Always online.</strong> Always calculating, learning and building inside your browser.</p>
-      <h3>Known for</h3>
+      <h2 data-i18n="aboutTitle">认识 ZBRAIN</h2>
+      <img class="portrait" src="assets/brand/zbrain-logo.png?v=1" data-i18n-alt="portraitAlt" alt="ZBRAIN 点云角色">
+      <p data-i18n="aboutP1">ZBRAIN 是对赵长鹏的风格化点云演绎：深色短发、自然的 V 形发际线、矩形眼镜和专注的目光。</p>
+      <p data-i18n="aboutP2">它围绕持续执行的理念构建，将公开的加密文化变成一个趣味动画大脑。</p>
+      <p data-i18n-html="aboutP3">于是我们创造了 ZBRAIN。<strong>始终在线。</strong>它在你的浏览器中不断计算、学习和构建。</p>
+      <h3 data-i18n="knownFor">标志性特征</h3>
       <ul class="does">
-        <li>The close-cropped dark hair and integrated V-shaped hairline.</li>
-        <li>The thin rectangular CZ-style glasses.</li>
-        <li>A calm, slightly bored stare, even in dot form.</li>
+        <li data-i18n="known1">深色短发与一体化 V 形发际线。</li>
+        <li data-i18n="known2">纤细的 CZ 风格矩形眼镜。</li>
+        <li data-i18n="known3">即使以点云呈现，也保持冷静而略显无聊的目光。</li>
       </ul>
-      <p class="fine">ZBRAIN is a fictional, unaffiliated parody character. It is not Changpeng Zhao and does not use private data.</p>
+      <p class="fine" data-i18n="aboutDisclaimer">ZBRAIN 是一个虚构且无关联的戏仿角色。它不是赵长鹏本人，也不使用私人数据。</p>
     </section>
 
     <section data-page="token">
-      <h2>$ZBRAIN lives on Robinhood Chain</h2>
-      <p>The token is the key to the ZBRAIN experiment. Hold it, meme it and watch the brain think.</p>
+      <h2 data-i18n="tokenTitle">$ZBRAIN 运行于 Robinhood Chain</h2>
+      <p data-i18n="tokenIntro">该代币是 ZBRAIN 实验的钥匙。持有它、传播它，并观察大脑思考。</p>
       <dl class="facts">
-        <dt>Ticker</dt><dd class="tk">$ZBRAIN</dd>
-        <dt>Chain</dt><dd>Robinhood Chain</dd>
-        <dt>Supply</dt><dd>To be announced</dd>
-        <dt>Taxes</dt><dd>To be announced</dd>
+        <dt data-i18n="tickerLabel">代号</dt><dd class="tk">$ZBRAIN</dd>
+        <dt data-i18n="chainLabel">链</dt><dd>Robinhood Chain</dd>
+        <dt data-i18n="supplyLabel">供应量</dt><dd data-i18n="tba">待公布</dd>
+        <dt data-i18n="taxesLabel">税费</dt><dd data-i18n="tba">待公布</dd>
       </dl>
-      <h3>Contract</h3>
-      <div class="ca"><code id="caText">0x0000…0000</code><button class="btn" id="copyCa">Copy</button></div>
-      <p class="fine" id="caNote">Placeholder until launch. Always check the contract on the official X account.</p>
+      <h3 data-i18n="contractLabel">合约</h3>
+      <div class="ca"><code id="caText">0x0000…0000</code><button class="btn" id="copyCa" data-i18n="copy">复制</button></div>
+      <p class="fine" id="caNote" data-i18n="caPlaceholder">上线前的占位信息。请始终通过官方 X 账号核对合约。</p>
       <div class="row">
-        <a class="btn pink" id="dexLink" href="#" target="_blank" rel="noopener">Open DexScreener</a>
-        <a class="btn ghost" id="xLink" href="#" target="_blank" rel="noopener">Follow on X</a>
+        <a class="btn pink" id="dexLink" href="#" target="_blank" rel="noopener" data-i18n="openDex">打开 DexScreener</a>
+        <a class="btn ghost" id="xLink" href="#" target="_blank" rel="noopener" data-i18n="followX">在 X 上关注</a>
       </div>
-      <h3>How to buy</h3>
+      <h3 data-i18n="howBuy">如何购买</h3>
       <ol class="steps">
-        <li><b>Get a wallet</b>Any wallet that supports Robinhood Chain.</li>
-        <li><b>Bring ETH</b>Bridge ETH to Robinhood Chain.</li>
-        <li><b>Swap</b>Paste the contract into a DEX on Robinhood Chain and swap.</li>
+        <li data-i18n-html="buyStep1"><b>准备钱包</b>使用任何支持 Robinhood Chain 的钱包。</li>
+        <li data-i18n-html="buyStep2"><b>准备 ETH</b>将 ETH 跨链到 Robinhood Chain。</li>
+        <li data-i18n-html="buyStep3"><b>兑换</b>将合约粘贴到 Robinhood Chain 上的 DEX 并进行兑换。</li>
       </ol>
-      <p class="fine">$ZBRAIN is a meme token. It promises nothing, including returns. The brain doesn’t promise anything either. Not financial advice.</p>
+      <p class="fine" data-i18n="tokenDisclaimer">$ZBRAIN 是一个 Meme 代币，不承诺任何事情，包括回报。这个大脑也不作任何承诺。非财务建议。</p>
     </section>
   </div>
 </aside>
@@ -330,6 +338,103 @@ const CONFIG = {
   x: "https://x.com/"
 };
 
+const I18N = {
+  zh: {
+    loaderTitle: "正在上传 ZBRAIN…", navBrain: "大脑", navHow: "工作原理", navAbout: "关于", navToken: "代币",
+    mainNavAria: "主导航", soundAria: "声音", soundOn: "声音：开", soundOff: "声音：关", buy: "购买", menu: "菜单",
+    heroTitle: "赵长鹏的大脑，实时运行中。", heroBody: "ZBRAIN 将 CZ 公开展现的建设者能量化为一个鲜活的点云大脑。它不断计算、观察市场，并持续构建。",
+    makeThink: "让它思考", brainMonitor: "大脑监视器", thinking: "思考", cartoonCortex: "卡通皮层", reading: "阅读",
+    neuronsScreen: "屏幕神经元", primesFound: "已发现质数", gamesLost: "游戏失败", articlesRead: "已读文章",
+    simulationNote: "在你的浏览器中模拟，数学计算是真实的。", changeChannel: "切换频道", hint: "拖动即可旋转。点击大脑让它思考。",
+    close: "关闭", closeAria: "关闭并返回大脑", sceneAria: "赵长鹏的 ZBRAIN，由点云构成并连接到一台老式电脑。拖动可旋转，点击可让它思考。",
+    characterLogoAlt: "ZBRAIN 角色标志", brandLogoAlt: "ZBRAIN 标志", portraitAlt: "ZBRAIN 点云角色",
+    howTitle: "我们如何构建这个大脑", howStep1: "<b>我们映射了公开信号</b>建设者语录、加密行业历史、市场周期，以及与 CZ 公众形象相关的理念。",
+    howStep2: "<b>我们压缩了噪声</b>只保留最强的信号：构建、学习、适应并持续前进。",
+    howStep3: "<b>我们把它变成神经元</b>每个点都是一个微小信号，共同组成动画化的 ZBRAIN 角色。",
+    howStep4: "<b>我们把它接入电脑</b>然后让它自由行动。它选择了卡通片。", replayUpload: "重新播放上传过程",
+    allDayTitle: "这个大脑整天都在做什么", does1: "真的进行算术运算。有时第一次会算错，然后自行修正。", does2: "持续在后台寻找质数，从不停歇。",
+    does3: "一遍又一遍地看儿童卡通片。", does4: "玩儿童游戏，经常失败，还把所有形状都塞进方形孔。", does5: "偶尔打开维基百科，读上一段。",
+    disclaimer: "ZBRAIN 是受公共文化启发的非关联戏仿模拟，不使用任何私人数据，所有内容均在你的浏览器中运行。",
+    aboutTitle: "认识 ZBRAIN", aboutP1: "ZBRAIN 是对赵长鹏的风格化点云演绎：深色短发、自然的 V 形发际线、矩形眼镜和专注的目光。",
+    aboutP2: "它围绕持续执行的理念构建，将公开的加密文化变成一个趣味动画大脑。", aboutP3: "于是我们创造了 ZBRAIN。<strong>始终在线。</strong>它在你的浏览器中不断计算、学习和构建。",
+    knownFor: "标志性特征", known1: "深色短发与一体化 V 形发际线。", known2: "纤细的 CZ 风格矩形眼镜。", known3: "即使以点云呈现，也保持冷静而略显无聊的目光。",
+    aboutDisclaimer: "ZBRAIN 是一个虚构且无关联的戏仿角色。它不是赵长鹏本人，也不使用私人数据。",
+    tokenTitle: "$ZBRAIN 运行于 Robinhood Chain", tokenIntro: "该代币是 ZBRAIN 实验的钥匙。持有它、传播它，并观察大脑思考。",
+    tickerLabel: "代号", chainLabel: "链", supplyLabel: "供应量", taxesLabel: "税费", tba: "待公布", contractLabel: "合约", copy: "复制",
+    caPlaceholder: "上线前的占位信息。请始终通过官方 X 账号核对合约。", caCheck: "兑换前请务必再次核对合约。", openDex: "打开 DexScreener", followX: "在 X 上关注",
+    howBuy: "如何购买", buyStep1: "<b>准备钱包</b>使用任何支持 Robinhood Chain 的钱包。", buyStep2: "<b>准备 ETH</b>将 ETH 跨链到 Robinhood Chain。",
+    buyStep3: "<b>兑换</b>将合约粘贴到 Robinhood Chain 上的 DEX 并进行兑换。", tokenDisclaimer: "$ZBRAIN 是一个 Meme 代币，不承诺任何事情，包括回报。这个大脑也不作任何承诺。非财务建议。",
+    contractSoon: "合约即将公布", notLive: "尚未上线", copied: "已复制", selectCopy: "请选择并复制", switchLanguage: "Switch to English",
+    latestPrime: "最新", booting: "启动中",
+    loaderSteps: [["映射公开信号", "完成"], ["移除重复观点", "剩 1 条"], ["修整短发", "完成"], ["佩戴 CZ 眼镜", "完成"], ["启动卡通皮层", "完成"]],
+    marquee: ["2 + 2 = 4，已确认", "又看了一遍 Blobby", "调整了眼镜", "在 Jump Guy 中失败", "把星星塞进方形孔", "还在思考热狗", "短发：就绪", "$ZBRAIN 运行于 Robinhood Chain", "又找到一个质数", "镜框：完全水平"],
+    jokes: ["热狗算三明治吗：仍在计算", "π ≈ 3.14159265… 算累了", "检查眼镜是否水平：精准", "吸管有几个孔：1 还是 2", "麦片算汤吗：稍后再议", "斐波那契：1 1 2 3 5 8 13 21 34…"],
+    articles: [
+      { id: "book", t: "购买我的书", s: "购买我的书。这是一本实用指南，讲述如何穿越每个市场周期、保持专注，并把想法变成产品。", img: "book" },
+      { id: "build", t: "构建模式", s: "构建模式意味着专注于有用的产品、稳健的系统和下一次迭代，而不是短期噪声。", img: "brain" },
+      { id: "brain", t: "大脑", s: "大脑是控制思维、记忆和运动的器官。不同个体的结果可能有所不同。", img: "brain" },
+      { id: "candles", t: "K 线图", s: "K 线图展示价格在一段时间内的开盘价、最高价、最低价和收盘价。", img: "candles" },
+      { id: "sky", t: "天空为什么是蓝色", s: "阳光被空气分子散射，其中蓝光散射最强，因此天空看起来是蓝色的。", img: "sky" }
+    ],
+    programs: {
+      cartoon: { lbl: "观看中", ttl: "Blobby，第 4 集：户外" }, sorter: { lbl: "游戏中", ttl: "形状分类器（所有形状都能塞进方形孔）" },
+      runner: { lbl: "游戏中", ttl: "跳跃小子" }, wiki: { lbl: "阅读中", ttl: "维基百科" }
+    },
+    feed: {
+      thinking: "思考中…", wait: "等等…", fixed: "✓ 已修正", square: "{shape} → 方形孔。大概正确", lost: "跳跃小子：得分 {score} 后再次失败。",
+      wikiOpened: "打开维基百科：“{title}”", reading: "阅读：{title}", cartoonChannel: "频道：卡通片（又来了）", gameOpened: "打开了儿童游戏", requested: "，按你的要求",
+      cartoonsThought: "卡通片！！", gameThought: "游戏时间", hello: "你好？", math: "我会算数学", back: "我回来了", reupload: "正在重新上传 ZBRAIN…",
+      startup: ["上传完成", "神经元在线：{count}", "CZ 眼镜：已佩戴", "短发：就绪"], ambient: ["Blobby 向左走了", "太阳为什么在微笑", "数云朵：3", "Blobby 弹了一下。很好。"], gameOver: "又失败了"
+    },
+    canvas: { blobbyEpisode: "第 4 集：户外", squareHole: "方形孔！", shapeSorter: "形状分类器", star: "星形", circle: "圆形", triangle: "三角形", gameOver: "游戏结束", score: "得分", best: "最佳", jumpGuy: "跳跃小子", wikiFrom: "来自维基百科，自由的百科全书", buyBook: "购买我的书", byZbrain: "ZBRAIN 著" }
+  },
+  en: {
+    loaderTitle: "Uploading ZBRAIN…", navBrain: "Brain", navHow: "How it works", navAbout: "About", navToken: "Token",
+    mainNavAria: "Main", soundAria: "Sound", soundOn: "Sound on", soundOff: "Sound off", buy: "Buy", menu: "Menu",
+    heroTitle: "Changpeng Zhao's brain, running live.", heroBody: "ZBRAIN turns CZ’s public builder energy into a living point-cloud brain. It calculates, watches markets and never stops building.",
+    makeThink: "Make it think", brainMonitor: "Brain monitor", thinking: "Thinking", cartoonCortex: "Cartoon cortex", reading: "Reading",
+    neuronsScreen: "Neurons on screen", primesFound: "Primes found", gamesLost: "Games lost", articlesRead: "Articles read",
+    simulationNote: "Simulated in your browser. The math is real.", changeChannel: "Change channel", hint: "Drag to spin him. Click his brain to make him think.",
+    close: "Close", closeAria: "Close and go back to the brain", sceneAria: "Changpeng Zhao's ZBRAIN, made of dots and wired to an old computer. Drag to spin it, click it to make it think.",
+    characterLogoAlt: "ZBRAIN character logo", brandLogoAlt: "ZBRAIN logo", portraitAlt: "ZBRAIN point-cloud character",
+    howTitle: "How we made his brain", howStep1: "<b>We mapped the public signal</b>Builder quotes, crypto history, market cycles and the ideas associated with CZ’s public persona.",
+    howStep2: "<b>We compressed the noise</b>Only the strongest signals remained: build, learn, adapt and keep moving.",
+    howStep3: "<b>We turned it into neurons</b>Each dot is one tiny signal. Together they form the animated ZBRAIN character.",
+    howStep4: "<b>We plugged it into a computer</b>Then we let it do whatever it wanted. It chose cartoons.", replayUpload: "Replay the upload",
+    allDayTitle: "What the brain does all day", does1: "Does arithmetic, for real. Sometimes gets it wrong first, then fixes it.", does2: "Hunts for prime numbers in the background and never stops.",
+    does3: "Watches kids’ cartoons over and over.", does4: "Plays kids’ games. Loses a lot. Puts every shape in the square hole.", does5: "Sometimes opens Wikipedia and reads one paragraph.",
+    disclaimer: "ZBRAIN is an unaffiliated parody simulation inspired by public culture. No private data is used. Everything runs in your browser.",
+    aboutTitle: "Meet ZBRAIN", aboutP1: "ZBRAIN is a stylized point-cloud interpretation of Changpeng Zhao: close-cropped dark hair, a natural V hairline, rectangular glasses and a focused stare.",
+    aboutP2: "Built around the idea of relentless execution, it turns public crypto culture into a playful animated brain.", aboutP3: "So we created ZBRAIN. <strong>Always online.</strong> Always calculating, learning and building inside your browser.",
+    knownFor: "Known for", known1: "The close-cropped dark hair and integrated V-shaped hairline.", known2: "The thin rectangular CZ-style glasses.", known3: "A calm, slightly bored stare, even in dot form.",
+    aboutDisclaimer: "ZBRAIN is a fictional, unaffiliated parody character. It is not Changpeng Zhao and does not use private data.",
+    tokenTitle: "$ZBRAIN lives on Robinhood Chain", tokenIntro: "The token is the key to the ZBRAIN experiment. Hold it, meme it and watch the brain think.",
+    tickerLabel: "Ticker", chainLabel: "Chain", supplyLabel: "Supply", taxesLabel: "Taxes", tba: "To be announced", contractLabel: "Contract", copy: "Copy",
+    caPlaceholder: "Placeholder until launch. Always check the contract on the official X account.", caCheck: "Always double-check the contract before you swap.", openDex: "Open DexScreener", followX: "Follow on X",
+    howBuy: "How to buy", buyStep1: "<b>Get a wallet</b>Any wallet that supports Robinhood Chain.", buyStep2: "<b>Bring ETH</b>Bridge ETH to Robinhood Chain.",
+    buyStep3: "<b>Swap</b>Paste the contract into a DEX on Robinhood Chain and swap.", tokenDisclaimer: "$ZBRAIN is a meme token. It promises nothing, including returns. The brain doesn’t promise anything either. Not financial advice.",
+    contractSoon: "Contract coming soon", notLive: "Not live yet", copied: "Copied", selectCopy: "Select and copy", switchLanguage: "切换为中文", latestPrime: "latest", booting: "Booting",
+    loaderSteps: [["Mapping public signals", "done"], ["Removing duplicate opinions", "1 left"], ["Trimming the buzz cut", "done"], ["Fitting CZ glasses", "done"], ["Booting cartoon cortex", "done"]],
+    marquee: ["2 + 2 = 4, confirmed", "watched Blobby again", "adjusted the glasses", "lost at Jump Guy", "put the star in the square hole", "still thinking about the hot dog", "buzz cut: ready", "$ZBRAIN on Robinhood Chain", "found another prime", "frames: perfectly level"],
+    jokes: ["is a hot dog a sandwich: still computing", "π ≈ 3.14159265… got bored", "checking glasses alignment: exact", "how many holes in a straw: 1 or 2", "is cereal soup: parked for later", "fibonacci: 1 1 2 3 5 8 13 21 34…"],
+    articles: [
+      { id: "book", t: "Buy My Book", s: "BUY MY BOOK. A practical field guide to building through every market cycle, staying focused and turning ideas into products.", img: "book" },
+      { id: "build", t: "Build mode", s: "Build mode means focusing on useful products, resilient systems and the next iteration instead of short-term noise.", img: "brain" },
+      { id: "brain", t: "Brain", s: "The brain is the organ that controls thought, memory and movement. Results may vary between individuals.", img: "brain" },
+      { id: "candles", t: "Candlestick chart", s: "A candlestick chart shows the open, high, low and close of a price over a period of time.", img: "candles" },
+      { id: "sky", t: "Why is the sky blue", s: "Sunlight is scattered by air molecules, and blue light is scattered the most. That is why the sky looks blue.", img: "sky" }
+    ],
+    programs: { cartoon: { lbl: "Watching", ttl: "Blobby, episode 4: Outside" }, sorter: { lbl: "Playing", ttl: "Shape Sorter (every shape fits the square hole)" }, runner: { lbl: "Playing", ttl: "Jump Guy" }, wiki: { lbl: "Reading", ttl: "Wikipedia" } },
+    feed: {
+      thinking: "thinking…", wait: "wait…", fixed: "✓ fixed it", square: "{shape} → square hole. correct, probably", lost: "jump guy: lost at {score}. again.",
+      wikiOpened: "opened wikipedia: “{title}”", reading: "reading: {title}", cartoonChannel: "channel: cartoons (again)", gameOpened: "opened a kids game", requested: ", as requested",
+      cartoonsThought: "cartoons!!", gameThought: "game time", hello: "hello?", math: "i can do math", back: "i’m back", reupload: "re-uploading ZBRAIN…",
+      startup: ["upload complete", "neurons online: {count}", "CZ glasses: fitted", "buzz cut: ready"], ambient: ["blobby went left", "why is the sun smiling", "counting clouds: 3", "blobby bounced. good."], gameOver: "game over again"
+    },
+    canvas: { blobbyEpisode: "episode 4: outside", squareHole: "SQUARE HOLE!", shapeSorter: "SHAPE SORTER", star: "star", circle: "circle", triangle: "triangle", gameOver: "GAME OVER", score: "score", best: "best", jumpGuy: "JUMP GUY", wikiFrom: "From Wikipedia, the free encyclopedia", buyBook: "BUY MY BOOK", byZbrain: "BY ZBRAIN" }
+  }
+};
+
 const $ = s => document.querySelector(s);
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const hasGsap = typeof window.gsap !== "undefined";
@@ -339,24 +444,53 @@ const tween = (obj, vars) => {
   if (vars.onUpdate) vars.onUpdate(); if (vars.onComplete) vars.onComplete();
 };
 
+let currentLanguage = "zh";
+let languageInitialized = false;
+const languageToggle = $("#languageToggle");
+const localized = () => I18N[currentLanguage];
+const fillTemplate = (text, values = {}) => Object.entries(values).reduce((out, [key, value]) => out.replaceAll(`{${key}}`, value), text);
+function applyStaticTranslations() {
+  const words = localized();
+  document.querySelectorAll("[data-i18n]").forEach(el => { const value = words[el.dataset.i18n]; if (typeof value === "string") el.textContent = value; });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => { const value = words[el.dataset.i18nHtml]; if (typeof value === "string") el.innerHTML = value; });
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => { const value = words[el.dataset.i18nAria]; if (typeof value === "string") el.setAttribute("aria-label", value); });
+  document.querySelectorAll("[data-i18n-alt]").forEach(el => { const value = words[el.dataset.i18nAlt]; if (typeof value === "string") el.alt = value; });
+}
+function setLanguage(language) {
+  if (!I18N[language]) return;
+  currentLanguage = language;
+  document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+  languageToggle.textContent = language === "zh" ? "EN" : "中文";
+  languageToggle.setAttribute("aria-label", localized().switchLanguage);
+  applyStaticTranslations();
+  renderMarquee();
+  refreshLocalizedRuntime();
+  languageInitialized = true;
+}
+languageToggle.addEventListener("click", () => setLanguage(currentLanguage === "zh" ? "en" : "zh"));
+
 /* ---- config into DOM ---- */
 document.querySelectorAll(".tk").forEach(e => e.textContent = CONFIG.ticker);
 const isPlaceholderCA = /^0x0+$/.test(CONFIG.contract);
-$("#caText").textContent = isPlaceholderCA ? "Contract coming soon" : CONFIG.contract;
+function renderContractState() {
+  $("#caText").textContent = isPlaceholderCA ? localized().contractSoon : CONFIG.contract;
+  $("#caNote").textContent = isPlaceholderCA ? localized().caPlaceholder : localized().caCheck;
+  $("#copyCa").textContent = localized().copy;
+}
 $("#dexLink").href = CONFIG.dexscreener; $("#xLink").href = CONFIG.x;
-if (!isPlaceholderCA) $("#caNote").textContent = "Always double-check the contract before you swap.";
 $("#copyCa").addEventListener("click", async () => {
   const b = $("#copyCa");
-  if (isPlaceholderCA) { b.textContent = "Not live yet"; setTimeout(() => b.textContent = "Copy", 1600); return; }
-  try { await navigator.clipboard.writeText(CONFIG.contract); b.textContent = "Copied"; }
-  catch (e) { b.textContent = "Select and copy"; }
-  setTimeout(() => b.textContent = "Copy", 1600);
+  if (isPlaceholderCA) { b.textContent = localized().notLive; setTimeout(() => b.textContent = localized().copy, 1600); return; }
+  try { await navigator.clipboard.writeText(CONFIG.contract); b.textContent = localized().copied; }
+  catch (e) { b.textContent = localized().selectCopy; }
+  setTimeout(() => b.textContent = localized().copy, 1600);
 });
 
 /* ---- marquee ---- */
-const MARQ = ["2 + 2 = 4, confirmed", "watched Blobby again", "adjusted the glasses", "lost at Jump Guy", "put the star in the square hole", "still thinking about the hot dog", "buzz cut: ready", CONFIG.ticker + " on Robinhood Chain", "found another prime", "frames: perfectly level"];
-const mHtml = MARQ.map(t => `<span>${t}</span><i>●</i>`).join("");
-$("#track").innerHTML = mHtml + mHtml;
+function renderMarquee() {
+  const mHtml = localized().marquee.map(t => `<span>${t.replace("$ZBRAIN", CONFIG.ticker)}</span><i>●</i>`).join("");
+  $("#track").innerHTML = mHtml + mHtml;
+}
 
 /* ---- sound ---- */
 let audio = null, soundOn = false;
@@ -380,7 +514,7 @@ $("#soundBtn").addEventListener("click", () => {
   if (soundOn && !audio) { try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { soundOn = false; } }
   if (audio && audio.state === "suspended") audio.resume();
   $("#soundBtn").setAttribute("aria-pressed", soundOn);
-  $("#soundLbl").textContent = soundOn ? "Sound on" : "Sound off";
+  $("#soundLbl").textContent = soundOn ? localized().soundOn : localized().soundOff;
   $("#sndWave").setAttribute("opacity", soundOn ? "1" : ".25");
   blip(660, 0.08);
 });
@@ -835,7 +969,7 @@ function applyShift() {
 }
 window.addEventListener("resize", layout);
 layout();
-$("#sNeurons").textContent = (head.count + comp.count + CABLE_N).toLocaleString("en-US");
+$("#sNeurons").textContent = (head.count + comp.count + CABLE_N).toLocaleString(currentLanguage === "zh" ? "zh-CN" : "en-US");
 
 /* ================= BRAIN EVENTS ================= */
 let time = 0;
@@ -883,7 +1017,7 @@ function mathProblem() {
 function think(fromUser) {
   const p = mathProblem();
   const wrong = Math.random() < 0.2;
-  const li = feedLine(`${p.q} = <span class="ctx">thinking…</span>`);
+  const li = feedLine(`${p.q} = <span class="ctx">${localized().feed.thinking}</span>`);
   brainWave("A", new THREE.Vector3(rr(-0.9, 0.9), rr(0.1, 0.7), rr(0.2, 0.9)));
   headMat.uniforms.uTwitch.value = 1; if (hasGsap) gsap.to(headMat.uniforms.uTwitch, { value: 0, duration: 0.9, delay: 0.2 });
   sendPulse(-1, COL.pink);
@@ -891,8 +1025,8 @@ function think(fromUser) {
   setTimeout(() => {
     if (wrong) {
       const bad = p.a + (Math.random() < 0.5 ? -1 : 1) * ri(1, 3);
-      li.innerHTML = `${p.q} = <span class="bad">${bad}</span> <span class="ctx">wait…</span>`;
-      setTimeout(() => { li.innerHTML = `${p.q} = ${p.a} <span class="ok">✓ fixed it</span>`; blip(990, 0.06); }, 900);
+      li.innerHTML = `${p.q} = <span class="bad">${bad}</span> <span class="ctx">${localized().feed.wait}</span>`;
+      setTimeout(() => { li.innerHTML = `${p.q} = ${p.a} <span class="ok">${localized().feed.fixed}</span>`; blip(990, 0.06); }, 900);
       thoughtBubble(`${p.q} = ${bad}?`, "pink");
     } else {
       li.innerHTML = `${p.q} = ${p.a} <span class="ok">✓</span>`;
@@ -901,12 +1035,15 @@ function think(fromUser) {
     }
   }, 600 + Math.random() * 500);
 }
-const JOKES = ["is a hot dog a sandwich: still computing", "π ≈ 3.14159265… got bored", "checking glasses alignment: exact", "how many holes in a straw: 1 or 2", "is cereal soup: parked for later", "fibonacci: 1 1 2 3 5 8 13 21 34…"];
 // background prime hunt (real)
 let primeN = 2, primeCount = 0, primeLast = 2;
 function isPrime(n) { if (n < 2) return false; if (n % 2 === 0) return n === 2; for (let i = 3; i * i <= n; i += 2) if (n % i === 0) return false; return true; }
 function primeStep() { for (let k = 0; k < 120; k++) { if (isPrime(primeN)) { primeCount++; primeLast = primeN; } primeN++; } }
-setInterval(() => { $("#sPrimes").textContent = primeCount.toLocaleString("en-US") + " (latest " + primeLast.toLocaleString("en-US") + ")"; }, 500);
+function updatePrimeStat() {
+  const locale = currentLanguage === "zh" ? "zh-CN" : "en-US";
+  $("#sPrimes").textContent = primeCount.toLocaleString(locale) + ` (${localized().latestPrime} ` + primeLast.toLocaleString(locale) + ")";
+}
+setInterval(updatePrimeStat, 500);
 const stats = { lost: 0, read: 0, score: 0, best: 0 };
 const meters = { think: 30, cartoon: 80, read: 5 };
 function setMeters() {
@@ -916,7 +1053,7 @@ function setMeters() {
 /* ================= SCREEN PROGRAMS ================= */
 const G = sx;
 function rrect(x, y, w, h, r) { G.beginPath(); G.moveTo(x + r, y); G.arcTo(x + w, y, x + w, y + h, r); G.arcTo(x + w, y + h, x, y + h, r); G.arcTo(x, y + h, x, y, r); G.arcTo(x, y, x + w, y, r); G.closePath(); }
-function wrap(text, x, y, maxW, lh) { const words = text.split(" "); let line = ""; for (const w of words) { const t = line + w + " "; if (G.measureText(t).width > maxW && line) { G.fillText(line, x, y); line = w + " "; y += lh; } else line = t; } G.fillText(line, x, y); return y; }
+function wrap(text, x, y, maxW, lh) { const words = currentLanguage === "zh" ? Array.from(text) : text.split(" "); const gap = currentLanguage === "zh" ? "" : " "; let line = ""; for (const w of words) { const t = line + w + gap; if (G.measureText(t).width > maxW && line) { G.fillText(line, x, y); line = w + gap; y += lh; } else line = t; } G.fillText(line, x, y); return y; }
 function star(cx, cy, r1, r2, n) { G.beginPath(); for (let i = 0; i < n * 2; i++) { const r = i % 2 ? r2 : r1, a = -Math.PI / 2 + i * Math.PI / n; G.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); } G.closePath(); }
 function shapePath(kind, x, y, s) {
   G.beginPath();
@@ -927,7 +1064,7 @@ function shapePath(kind, x, y, s) {
 }
 
 const Cartoon = {
-  kind: "cartoon", lbl: "Watching", ttl: "Blobby, episode 4: Outside", dur: 15,
+  id: "cartoon", kind: "cartoon", dur: 15,
   start() { this.t = 0; },
   draw(dt) {
     this.t += dt; const t = this.t;
@@ -955,14 +1092,14 @@ const Cartoon = {
     if (t < 2) {
       G.fillStyle = "rgba(43,59,224," + Math.min(1, 2 - t) + ")"; G.fillRect(0, 0, 480, 360);
       G.fillStyle = "rgba(255,210,63," + Math.min(1, 2 - t) + ")"; G.font = "800 64px 'Bricolage Grotesque', Arial"; G.textAlign = "center"; G.fillText("BLOBBY", 240, 175);
-      G.font = "600 20px 'Bricolage Grotesque', Arial"; G.fillStyle = "rgba(255,255,255," + Math.min(1, 2 - t) + ")"; G.fillText("episode 4: outside", 240, 210); G.textAlign = "left";
+      G.font = "600 20px 'Bricolage Grotesque', Arial"; G.fillStyle = "rgba(255,255,255," + Math.min(1, 2 - t) + ")"; G.fillText(localized().canvas.blobbyEpisode, 240, 210); G.textAlign = "left";
     }
     if (Math.random() < dt * 0.35) sendPulse(1, COL.mint);
   }
 };
 
 const Sorter = {
-  kind: "game", lbl: "Playing", ttl: "Shape Sorter (every shape fits the square hole)", dur: 14,
+  id: "sorter", kind: "game", dur: 14,
   start() { this.t = 0; this.shapes = ["star", "circle", "triangle"]; this.i = 0; this.done = 0; },
   draw(dt) {
     this.t += dt; const cyc = 5, lt = this.t % cyc, idx = Math.floor(this.t / cyc);
@@ -989,15 +1126,15 @@ const Sorter = {
     }
     if (lt > 3.8) {
       G.fillStyle = "#1B26A6"; G.font = "800 40px 'Bricolage Grotesque', Arial"; G.textAlign = "center";
-      G.fillText("SQUARE HOLE!", 240, 120); G.textAlign = "left";
-      if (this.done !== idx) { this.done = idx; feedLine(`<span class="ctx">${kind} → square hole. correct, probably</span>`); sendPulse(1, COL.gold); blip(740, 0.08, "triangle"); }
+      G.fillText(localized().canvas.squareHole, 240, 120); G.textAlign = "left";
+      if (this.done !== idx) { this.done = idx; feedLine(`<span class="ctx">${fillTemplate(localized().feed.square, { shape: localized().canvas[kind] || kind })}</span>`); sendPulse(1, COL.gold); blip(740, 0.08, "triangle"); }
     }
-    G.fillStyle = "#1B26A6"; G.font = "700 16px 'Bricolage Grotesque', Arial"; G.fillText("SHAPE SORTER", 16, 26);
+    G.fillStyle = "#1B26A6"; G.font = "700 16px 'Bricolage Grotesque', Arial"; G.fillText(localized().canvas.shapeSorter, 16, 26);
   }
 };
 
 const Runner = {
-  kind: "game", lbl: "Playing", ttl: "Jump Guy", dur: 15,
+  id: "runner", kind: "game", dur: 15,
   start() { this.reset(); this.over = 0; },
   reset() { this.py = 0; this.vy = 0; this.obs = []; this.next = 1; this.score = 0; this.t = 0; },
   draw(dt) {
@@ -1008,8 +1145,8 @@ const Runner = {
     G.fillStyle = "#37A956"; for (let i = 0; i < 12; i++) G.fillRect(((i * 50 - this.t * 180) % 600 + 600) % 600 - 60, 298, 22, 6);
     if (this.over > 0) {
       this.over -= dt;
-      G.fillStyle = "#1B26A6"; G.font = "800 46px 'Bricolage Grotesque', Arial"; G.textAlign = "center"; G.fillText("GAME OVER", 240, 150);
-      G.font = "600 20px 'Bricolage Grotesque', Arial"; G.fillText("score " + this.score + " · best " + stats.best, 240, 182); G.textAlign = "left";
+      G.fillStyle = "#1B26A6"; G.font = "800 46px 'Bricolage Grotesque', Arial"; G.textAlign = "center"; G.fillText(localized().canvas.gameOver, 240, 150);
+      G.font = "600 20px 'Bricolage Grotesque', Arial"; G.fillText(localized().canvas.score + " " + this.score + " · " + localized().canvas.best + " " + stats.best, 240, 182); G.textAlign = "left";
       this.drawGuy(90, 290 - 30, true);
       if (this.over <= 0) this.reset();
       return;
@@ -1027,10 +1164,10 @@ const Runner = {
     const gy = 290 - 30 - this.py;
     for (const o of this.obs) if (Math.abs(o.x - 90) < 24 && 290 - this.py - 2 > 290 - o.h) {
       this.over = 1.6; stats.lost++; $("#sLost").textContent = stats.lost;
-      feedLine(`<span class="ctx">jump guy: lost at ${this.score}. again.</span>`); thoughtBubble("game over again", "pink"); blip(180, 0.25, "sawtooth", 0.03);
+      feedLine(`<span class="ctx">${fillTemplate(localized().feed.lost, { score: this.score })}</span>`); thoughtBubble(localized().feed.gameOver, "pink"); blip(180, 0.25, "sawtooth", 0.03);
     }
     this.drawGuy(90, gy, false);
-    G.fillStyle = "#1B26A6"; G.font = "700 18px 'Bricolage Grotesque', Arial"; G.fillText("JUMP GUY", 16, 28); G.fillText("score " + this.score, 380, 28);
+    G.fillStyle = "#1B26A6"; G.font = "700 18px 'Bricolage Grotesque', Arial"; G.fillText(localized().canvas.jumpGuy, 16, 28); G.fillText(localized().canvas.score + " " + this.score, 380, 28);
   },
   drawGuy(x, y, dead) {
     G.fillStyle = "#3DE08A"; rrect(x - 16, y, 32, 30, 7); G.fill();
@@ -1040,27 +1177,23 @@ const Runner = {
   }
 };
 
-const ARTICLES = [
-  { t: "Buy My Book", s: "BUY MY BOOK. A practical field guide to building through every market cycle, staying focused and turning ideas into products.", img: "book" },
-  { t: "Build mode", s: "Build mode means focusing on useful products, resilient systems and the next iteration instead of short-term noise.", img: "brain" },
-  { t: "Brain", s: "The brain is the organ that controls thought, memory and movement. Results may vary between individuals.", img: "brain" },
-  { t: "Candlestick chart", s: "A candlestick chart shows the open, high, low and close of a price over a period of time.", img: "candles" },
-  { t: "Why is the sky blue", s: "Sunlight is scattered by air molecules, and blue light is scattered the most. That is why the sky looks blue.", img: "sky" }
-];
+const ARTICLES = () => localized().articles;
 const Wiki = {
-  kind: "wiki", lbl: "Reading", ttl: "Wikipedia", dur: 11,
-  start() { this.t = 0; this.a = ARTICLES[0]; this.switched = false; this.count(); },
-  count() { stats.read++; $("#sRead").textContent = stats.read; feedLine(`<span class="ctx">opened wikipedia: “${this.a.t}”</span>`); thoughtBubble("reading: " + this.a.t.toLowerCase(), "mint"); setNP(this.lbl, "Wikipedia: " + this.a.t); },
+  id: "wiki", kind: "wiki", dur: 11,
+  start() { this.t = 0; this.articleId = "book"; this.switched = false; this.count(); },
+  article() { return ARTICLES().find(article => article.id === this.articleId) || ARTICLES()[0]; },
+  count() { const article = this.article(); stats.read++; $("#sRead").textContent = stats.read; feedLine(`<span class="ctx">${fillTemplate(localized().feed.wikiOpened, { title: article.t })}</span>`); thoughtBubble(fillTemplate(localized().feed.reading, { title: article.t }), "mint"); setNP(localized().programs.wiki.lbl, localized().programs.wiki.ttl + ": " + article.t); },
   draw(dt) {
     this.t += dt;
-    if (!this.switched && this.a.img !== "book" && this.t > 5.6) { this.switched = true; let n; do { n = ARTICLES[Math.floor(Math.random() * ARTICLES.length)]; } while (n === this.a); this.a = n; this.count(); sendPulse(1, COL.mint); }
+    let article = this.article();
+    if (!this.switched && article.img !== "book" && this.t > 5.6) { this.switched = true; let n; do { n = ARTICLES()[Math.floor(Math.random() * ARTICLES().length)]; } while (n.id === this.articleId); this.articleId = n.id; article = this.article(); this.count(); sendPulse(1, COL.mint); }
     const scroll = Math.min(60, ((this.t % 5.6) / 5.6) * 80);
     G.fillStyle = "#fff"; G.fillRect(0, 0, 480, 360);
     G.save(); G.translate(0, -scroll);
-    G.fillStyle = "#222"; G.font = "400 30px Georgia, 'Times New Roman', serif"; G.fillText(this.a.t, 20, 88);
+    G.fillStyle = "#222"; G.font = "400 30px Georgia, 'Times New Roman', serif"; G.fillText(article.t, 20, 88);
     G.fillStyle = "#c8ccd1"; G.fillRect(20, 98, 440, 1);
-    G.fillStyle = "#54595d"; G.font = "italic 12px Georgia, serif"; G.fillText("From Wikipedia, the free encyclopedia", 20, 116);
-    G.fillStyle = "#202122"; G.font = "15px Georgia, serif"; const endY = wrap(this.a.s, 20, 146, 290, 21);
+    G.fillStyle = "#54595d"; G.font = "italic 12px Georgia, serif"; G.fillText(localized().canvas.wikiFrom, 20, 116);
+    G.fillStyle = "#202122"; G.font = "15px Georgia, serif"; const endY = wrap(article.s, 20, 146, 290, 21);
     G.fillStyle = "#eaecf0"; for (let i = 0; i < 9; i++) G.fillRect(20, endY + 26 + i * 18, i % 4 === 3 ? 180 : 290, 9);
     G.fillStyle = "#f8f9fa"; G.fillRect(326, 130, 134, 150); G.strokeStyle = "#c8ccd1"; G.strokeRect(326, 130, 134, 150);
     this.pic(393, 196);
@@ -1068,20 +1201,20 @@ const Wiki = {
     G.restore();
     G.fillStyle = "#f1f3f5"; G.fillRect(0, 0, 480, 44);
     G.fillStyle = "#fff"; rrect(12, 9, 456, 26, 13); G.fill(); G.strokeStyle = "#d0d4d9"; G.stroke();
-    G.fillStyle = "#54595d"; G.font = "13px Arial"; G.fillText("en.wikipedia.org/wiki/" + this.a.t.replace(/ /g, "_"), 26, 27);
+    G.fillStyle = "#54595d"; G.font = "13px Arial"; G.fillText((currentLanguage === "zh" ? "zh.wikipedia.org/wiki/" : "en.wikipedia.org/wiki/") + article.t.replace(/ /g, "_"), 26, 27);
     const cx = 200 + Math.sin(this.t * 0.9) * 60, cy = 200 + Math.cos(this.t * 0.7) * 40;
     G.fillStyle = "#111"; G.beginPath(); G.moveTo(cx, cy); G.lineTo(cx, cy + 18); G.lineTo(cx + 5, cy + 13); G.lineTo(cx + 12, cy + 13); G.closePath(); G.fill();
   },
   pic(x, y) {
-    const k = this.a.img;
+    const k = this.article().img;
     if (k === "book") {
       // ZBRAIN book cover replaces the former facial-hair article thumbnail.
       G.fillStyle = "#1B26A6"; G.fillRect(x - 47, y - 58, 94, 116);
       G.fillStyle = "#FF7EB6"; G.fillRect(x - 39, y - 58, 86, 116);
       G.fillStyle = "#FFD23F"; G.fillRect(x - 39, y - 58, 7, 116); G.strokeStyle = "#FFD23F"; G.lineWidth = 3; G.strokeRect(x - 39, y - 58, 86, 116);
       G.fillStyle = "#1B26A6"; G.font = "800 13px 'Bricolage Grotesque', Arial"; G.textAlign = "center";
-      G.fillText("BUY MY BOOK", x + 4, y - 25);
-      G.fillStyle = "#FFF3B0"; G.font = "700 10px 'Bricolage Grotesque', Arial"; G.fillText("BY ZBRAIN", x + 4, y + 36);
+      G.fillText(localized().canvas.buyBook, x + 4, y - 25);
+      G.fillStyle = "#FFF3B0"; G.font = "700 10px 'Bricolage Grotesque', Arial"; G.fillText(localized().canvas.byZbrain, x + 4, y + 36);
       G.fillStyle = "#1B26A6"; G.beginPath(); G.arc(x + 4, y + 2, 17, 0, Math.PI * 2); G.fill();
       G.fillStyle = "#FF7EB6"; for (let i = 0; i < 18; i++) { const a = i * 2.4, r = 4 + (i % 4) * 3; G.beginPath(); G.arc(x + 4 + Math.cos(a) * r, y + 2 + Math.sin(a) * r, 1.8, 0, Math.PI * 2); G.fill(); }
       G.textAlign = "left";
@@ -1096,6 +1229,24 @@ const Wiki = {
 const PROGRAMS = [Cartoon, Sorter, Runner, Wiki];
 let prog = null, progT = 0, switching = 0, screenOn = 0;
 function setNP(l, t) { $("#npLbl").textContent = l; $("#npTtl").textContent = t; }
+function programText(program) { return localized().programs[program.id]; }
+function refreshLocalizedRuntime() {
+  renderContractState();
+  $("#soundLbl").textContent = soundOn ? localized().soundOn : localized().soundOff;
+  $("#sNeurons").textContent = (head.count + comp.count + CABLE_N).toLocaleString(currentLanguage === "zh" ? "zh-CN" : "en-US");
+  updatePrimeStat();
+  if (prog === Wiki) {
+    const article = Wiki.article();
+    setNP(localized().programs.wiki.lbl, localized().programs.wiki.ttl + ": " + article.t);
+  } else if (prog) {
+    const text = programText(prog); setNP(text.lbl, text.ttl);
+  } else setNP(localized().booting, localized().cartoonCortex);
+  $("#thoughts").replaceChildren();
+  if (languageInitialized) {
+    feed.replaceChildren();
+    localized().feed.startup.forEach(line => feedLine(`<span class="ctx">${fillTemplate(line, { count: $("#sNeurons").textContent })}</span>`));
+  }
+}
 function pickProgram() {
   let p; do { const r = Math.random(); p = r < 0.34 ? Cartoon : r < 0.6 ? Sorter : r < 0.86 ? Runner : Wiki; } while (p === prog);
   return p;
@@ -1104,9 +1255,9 @@ function runProgram(p, reason) {
   switching = 0.45; staticNoise();
   setTimeout(() => {
     prog = p; progT = 0; prog.start();
-    if (prog !== Wiki) setNP(prog.lbl, prog.ttl);
-    const ctx = { cartoon: "channel: cartoons (again)", game: "opened a kids game", wiki: "" }[prog.kind];
-    if (ctx) { feedLine(`<span class="ctx">${ctx}${reason === "user" ? ", as requested" : ""}</span>`); thoughtBubble(prog.kind === "cartoon" ? "cartoons!!" : "game time", "gold"); }
+    if (prog !== Wiki) { const text = programText(prog); setNP(text.lbl, text.ttl); }
+    const ctx = { cartoon: localized().feed.cartoonChannel, game: localized().feed.gameOpened, wiki: "" }[prog.kind];
+    if (ctx) { feedLine(`<span class="ctx">${ctx}${reason === "user" ? localized().feed.requested : ""}</span>`); thoughtBubble(prog.kind === "cartoon" ? localized().feed.cartoonsThought : localized().feed.gameThought, "gold"); }
     const m = { cartoon: [28, 96, 3], game: [72, 35, 2], wiki: [55, 12, 90] }[prog.kind];
     meters.think = m[0]; meters.cartoon = m[1]; meters.read = m[2]; setMeters();
     headMat.uniforms.uAct.value = prog.kind === "game" ? 0.9 : prog.kind === "wiki" ? 0.6 : 0.25;
@@ -1214,25 +1365,25 @@ function assemble(dur) {
     .to({ v: 0 }, { v: 1, duration: 0.9, ease: "power2.inOut", onUpdate() { cableReveal = this.targets()[0].v; } }, dur * 0.85)
     .to(screenMat, { opacity: 1, duration: 0.2 }, dur * 0.85 + 0.8)
     .to({ v: 0 }, { v: 1, duration: 0.5, ease: "power4.out", onUpdate() { screenOn = this.targets()[0].v; } }, "<")
-    .add(() => { brainWave("A", new THREE.Vector3(0, 0.3, 0.8)); thoughtBubble("hello?", "gold"); blip(880, 0.1); }, dur * 0.9)
-    .add(() => thoughtBubble("i can do math", ""), dur + 1.6)
+    .add(() => { brainWave("A", new THREE.Vector3(0, 0.3, 0.8)); thoughtBubble(localized().feed.hello, "gold"); blip(880, 0.1); }, dur * 0.9)
+    .add(() => thoughtBubble(localized().feed.math, ""), dur + 1.6)
     .add(() => think(false), dur + 3.1);
   return tl;
 }
 $("#replayBtn").addEventListener("click", () => {
   history.pushState(null, "", location.pathname + location.search); openPage("home");
-  feedLine('<span class="ctx">re-uploading ZBRAIN…</span>');
+  feedLine(`<span class="ctx">${localized().feed.reupload}</span>`);
   setTimeout(() => {
     if (!hasGsap || REDUCED) return;
     gsap.to(headMat.uniforms.uAssemble, { value: 0, duration: 1.1, ease: "power2.in", onComplete: () => {
       gsap.to(headMat.uniforms.uAssemble, { value: 1, duration: 3, ease: "power2.inOut" });
-      setTimeout(() => { brainWave("A", new THREE.Vector3(0, 0.3, 0.8)); thoughtBubble("i’m back", "gold"); }, 2600);
+      setTimeout(() => { brainWave("A", new THREE.Vector3(0, 0.3, 0.8)); thoughtBubble(localized().feed.back, "gold"); }, 2600);
     } });
   }, 500);
 });
 
 function preload() {
-  const steps = [["Mapping public signals", "done"], ["Removing duplicate opinions", "1 left"], ["Trimming the buzz cut", "done"], ["Fitting CZ glasses", "done"], ["Booting cartoon cortex", "done"]];
+  const steps = localized().loaderSteps;
   const list = $("#preList"), bar = $("#preBar");
   if (REDUCED || !hasGsap) { $("#pre").remove(); start(); return; }
   let i = 0;
@@ -1249,7 +1400,7 @@ function preload() {
 }
 function start() {
   assemble(3.2);
-  ['upload complete', 'neurons online: ' + $("#sNeurons").textContent, 'CZ glasses: fitted', 'buzz cut: ready'].forEach((t, i) => setTimeout(() => feedLine(`<span class="ctx">${t}</span>`), REDUCED ? 0 : 900 + i * 450));
+  localized().feed.startup.forEach((line, i) => setTimeout(() => feedLine(`<span class="ctx">${fillTemplate(line, { count: $("#sNeurons").textContent })}</span>`), REDUCED ? 0 : 900 + i * 450));
   if (hasGsap && !REDUCED) {
     gsap.set([".intro", ".monitor", ".nowplaying", ".nav", ".marquee"], { autoAlpha: 0 });
     gsap.set(".intro", { y: 16 });
@@ -1273,8 +1424,8 @@ function ambientTick(dt) {
     ambient = 2.4 + Math.random() * 2.2;
     const r = Math.random();
     if (r < 0.62) think(false);
-    else if (r < 0.8) feedLine(`<span class="ctx">${JOKES[Math.floor(Math.random() * JOKES.length)]}</span>`);
-    else if (prog && prog.kind === "cartoon") feedLine(`<span class="ctx">${["blobby went left", "why is the sun smiling", "counting clouds: 3", "blobby bounced. good."][Math.floor(Math.random() * 4)]}</span>`);
+    else if (r < 0.8) { const jokes = localized().jokes; feedLine(`<span class="ctx">${jokes[Math.floor(Math.random() * jokes.length)]}</span>`); }
+    else if (prog && prog.kind === "cartoon") { const lines = localized().feed.ambient; feedLine(`<span class="ctx">${lines[Math.floor(Math.random() * lines.length)]}</span>`); }
     else think(false);
     meters.think = Math.max(5, Math.min(98, meters.think + ri(-8, 8))); setMeters();
   }
@@ -1308,6 +1459,7 @@ function frame() {
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+setLanguage("zh");
 preload();
 })();
 </script>

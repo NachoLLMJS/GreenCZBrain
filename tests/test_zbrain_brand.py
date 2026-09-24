@@ -14,7 +14,7 @@ class ZbrainBrandContractTests(unittest.TestCase):
         self.html = HTML_PATH.read_text(encoding="utf-8")
 
     def test_public_identity_is_zbrain_and_changpeng_zhao_brain(self):
-        self.assertIn("<title>ZBRAIN — Changpeng Zhao Brain</title>", self.html)
+        self.assertIn("<title>ZBRAIN</title>", self.html)
         self.assertIn(">ZBRAIN</a>", self.html)
         self.assertIn("Changpeng Zhao's brain", self.html)
         self.assertIn('ticker: "$ZBRAIN"', self.html)
@@ -36,11 +36,12 @@ class ZbrainBrandContractTests(unittest.TestCase):
         self.assertTrue(FAVICON_PATH.exists())
 
     def test_computer_channel_promotes_the_book_instead_of_the_old_feature(self):
-        self.assertIn('{ t: "Buy My Book"', self.html)
+        self.assertIn('t: "Buy My Book"', self.html)
+        self.assertIn('t: "购买我的书"', self.html)
         self.assertIn('img: "book"', self.html)
         self.assertIn('if (k === "book")', self.html)
-        self.assertIn('G.fillText("BUY MY BOOK"', self.html)
-        self.assertIn('G.fillText("BY ZBRAIN"', self.html)
+        self.assertIn('localized().canvas.buyBook', self.html)
+        self.assertIn('localized().canvas.byZbrain', self.html)
         self.assertNotIn('k === "network"', self.html)
 
 
