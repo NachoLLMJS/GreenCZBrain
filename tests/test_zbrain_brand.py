@@ -44,6 +44,15 @@ class ZbrainBrandContractTests(unittest.TestCase):
         self.assertIn('localized().canvas.byZbrain', self.html)
         self.assertNotIn('k === "network"', self.html)
 
+    def test_header_has_safe_link_to_official_x_account(self):
+        link = re.search(r'<a class="iconbtn twitter-link"[^>]*>', self.html)
+        self.assertIsNotNone(link)
+        markup = link.group(0)
+        self.assertIn('href="https://x.com/zbrainBNB"', markup)
+        self.assertIn('target="_blank"', markup)
+        self.assertIn('rel="noopener noreferrer"', markup)
+        self.assertIn('aria-label="Follow ZBRAIN on X"', markup)
+
 
 if __name__ == "__main__":
     unittest.main()

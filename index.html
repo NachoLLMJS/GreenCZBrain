@@ -51,6 +51,7 @@ button{font:inherit;color:inherit}
 .links a[aria-current="page"]{outline:2px dotted var(--cream);outline-offset:-2px}
 .iconbtn{background:none;border:2px dotted rgba(255,243,176,.7);border-radius:999px;height:38px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-weight:600;font-size:14px}
 .iconbtn svg{width:18px;height:18px}
+.twitter-link{text-decoration:none;white-space:nowrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;text-decoration:none;font-weight:700;font-size:15px;height:42px;padding:0 20px;border-radius:999px;background:var(--gold);color:var(--ink);outline:2px dotted var(--ink);outline-offset:-6px;transition:transform .15s ease}
 .btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(1px)}
 .btn:focus-visible{outline:3px solid var(--white);outline-offset:3px}
@@ -157,6 +158,8 @@ button{font:inherit;color:inherit}
   .brand img{width:32px;height:32px}
   #soundLbl{display:none}
   #soundBtn{margin-left:auto;padding:0 10px}
+  .twitter-link{width:38px;padding:0;justify-content:center}
+  .twitter-label{display:none}
   .burger{margin-left:0}
   .links.open{display:flex;position:fixed;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));left:12px;right:12px;flex-direction:column;background:var(--cobalt-deep);border:2px dotted var(--cream);border-radius:18px;padding:10px;gap:2px}
   .links.open a{font-size:18px;padding:12px 14px}
@@ -216,6 +219,10 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="sndWave" d="M16.5 8.5a5 5 0 0 1 0 7" opacity=".25"/></svg>
     <span id="soundLbl">声音：关</span>
   </button>
+  <a class="iconbtn twitter-link" href="https://x.com/zbrainBNB" target="_blank" rel="noopener noreferrer" aria-label="Follow ZBRAIN on X">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+    <span class="twitter-label">Twitter</span>
+  </a>
   <a class="btn buy" href="#token" data-nav="token"><span data-i18n="buy">购买</span> <span class="tk">$ZBRAIN</span></a>
   <button class="iconbtn burger" id="burger" aria-expanded="false" aria-controls="links" data-i18n="menu">菜单</button>
 </header>
@@ -312,7 +319,7 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
       <p class="fine" id="caNote" data-i18n="caPlaceholder">上线前的占位信息。请始终通过官方 X 账号核对合约。</p>
       <div class="row">
         <a class="btn pink" id="dexLink" href="#" target="_blank" rel="noopener" data-i18n="openDex">打开 DexScreener</a>
-        <a class="btn ghost" id="xLink" href="#" target="_blank" rel="noopener" data-i18n="followX">在 X 上关注</a>
+        <a class="btn ghost" id="xLink" href="#" target="_blank" rel="noopener noreferrer" data-i18n="followX">在 X 上关注</a>
       </div>
       <h3 data-i18n="howBuy">如何购买</h3>
       <ol class="steps">
@@ -335,7 +342,7 @@ const CONFIG = {
   ticker: "$ZBRAIN",
   contract: "0x0000000000000000000000000000000000000000",
   dexscreener: "https://dexscreener.com/",
-  x: "https://x.com/"
+  x: "https://x.com/zbrainBNB"
 };
 
 const I18N = {
