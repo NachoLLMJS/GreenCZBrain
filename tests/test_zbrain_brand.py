@@ -44,9 +44,16 @@ class ZbrainBrandContractTests(unittest.TestCase):
         self.assertIn('localized().canvas.byZbrain', self.html)
         self.assertNotIn('k === "network"', self.html)
 
-    def test_old_social_identity_is_not_published(self):
+    def test_official_x_link_is_published_safely(self):
         self.assertNotIn("https://x.com/zbrainBNB", self.html)
-        self.assertIn('x: ""', self.html)
+        self.assertIn('x: "https://x.com/greenczbrain"', self.html)
+        link = re.search(r'<a class="iconbtn twitter-link"[^>]*>', self.html)
+        self.assertIsNotNone(link)
+        markup = link.group(0)
+        self.assertIn('href="https://x.com/greenczbrain"', markup)
+        self.assertIn('target="_blank"', markup)
+        self.assertIn('rel="noopener noreferrer"', markup)
+        self.assertIn('aria-label="Follow GreenCZBrain on X"', markup)
 
     def test_bnb_chart_and_four_second_green_rush_exist(self):
         self.assertIn("const BNBChart", self.html)
