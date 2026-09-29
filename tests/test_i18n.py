@@ -12,10 +12,10 @@ class ZbrainI18nContractTests(unittest.TestCase):
 
     def test_chinese_is_the_real_first_paint_language(self):
         self.assertIn('<html lang="zh-CN">', self.html)
-        self.assertIn('<title>ZBRAIN</title>', self.html)
-        self.assertIn("赵长鹏的大脑，实时运行中。", self.html)
+        self.assertIn('<title>GreenCZBrain</title>', self.html)
+        self.assertIn("BNB 冲向 $2,000。大脑正在变绿。", self.html)
         self.assertIn("让它思考", self.html)
-        self.assertIn("切换频道", self.html)
+        self.assertIn("重播上涨", self.html)
         self.assertIn("大脑监视器", self.html)
 
     def test_language_toggle_is_fixed_and_starts_as_en(self):
@@ -41,10 +41,8 @@ class ZbrainI18nContractTests(unittest.TestCase):
             self.assertRegex(self.html, rf"\b{key}\s*:")
 
     def test_hero_explains_the_public_tweets_persona_in_both_languages(self):
-        self.assertIn("我们汇集并浓缩了 CZ 的公开推文", self.html)
-        self.assertIn("把他的想法、语气与建设者精神重组成 ZBRAIN 中鲜活的数字人格", self.html)
-        self.assertIn("We gathered CZ’s public tweets", self.html)
-        self.assertIn("a living persona inside ZBRAIN", self.html)
+        self.assertIn("触及 $2,000 时，大脑和整个世界会变绿 4 秒", self.html)
+        self.assertIn("At $2,000, the brain and the whole world turn green for 4 seconds", self.html)
 
     def test_toggle_changes_language_without_reload_and_updates_dynamic_ui(self):
         self.assertIn('let currentLanguage = "zh";', self.html)
@@ -57,8 +55,8 @@ class ZbrainI18nContractTests(unittest.TestCase):
         self.assertIn("refreshLocalizedRuntime();", self.html)
 
     def test_brand_and_token_identifiers_are_not_translated(self):
-        self.assertIn(">ZBRAIN</a>", self.html)
-        self.assertIn('ticker: "$ZBRAIN"', self.html)
+        self.assertIn(">GreenCZBrain</a>", self.html)
+        self.assertIn('ticker: "$GREENBRAIN"', self.html)
         self.assertNotIn("智脑", self.html)
 
 

@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ZBRAIN</title>
-<meta name="description" content="ZBRAIN 是一个在浏览器中实时运行、灵感来自赵长鹏公众形象的趣味点云大脑模拟。">
-<meta property="og:title" content="ZBRAIN">
-<meta property="og:description" content="一个灵感来自赵长鹏公众形象的趣味点云模拟。">
-<meta property="og:image" content="assets/brand/zbrain-logo-master.png?v=1">
+<title>GreenCZBrain</title>
+<meta name="description" content="GreenCZBrain 是一个 BNB 主题的互动点云大脑模拟：当 BNB 冲到 2,000 美元时，整个大脑与世界都会变绿。">
+<meta property="og:title" content="GreenCZBrain">
+<meta property="og:description" content="BNB 冲向 2,000 美元，大脑与整个世界随之变绿。">
+<meta property="og:image" content="assets/brand/greenczbrain-logo-master.png?v=2">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#2B3BE0">
-<link rel="icon" href="assets/brand/zbrain-favicon.ico?v=1">
+<meta name="theme-color" content="#F3BA2F">
+<link rel="icon" href="assets/brand/greenczbrain-favicon.ico?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="assets/vendor/fonts/google-fonts.css" rel="stylesheet">
@@ -196,19 +196,19 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
 
 <div class="pre" id="pre" aria-live="polite">
   <div class="pre-box">
-    <h2 data-i18n="loaderTitle">正在上传 ZBRAIN…</h2>
+    <h2 data-i18n="loaderTitle">正在上传 GreenCZBrain…</h2>
     <ul id="preList"></ul>
     <div class="pre-bar" aria-hidden="true"><i id="preBar"></i></div>
   </div>
 </div>
 
-<div class="bigtype" aria-hidden="true"><span>ZBRAIN</span><span>CZ BRAIN.</span></div>
-<canvas id="scene" data-i18n-aria="sceneAria" aria-label="赵长鹏的 ZBRAIN，由点云构成并连接到一台老式电脑。拖动可旋转，点击可让它思考。" role="img"></canvas>
-<div class="fallback"><img src="assets/brand/zbrain-logo-master.png?v=1" data-i18n-alt="characterLogoAlt" alt="ZBRAIN 角色标志"></div>
+<div class="bigtype" aria-hidden="true"><span>GREEN CZ</span><span>BRAIN.</span></div>
+<canvas id="scene" data-i18n-aria="sceneAria" aria-label="GreenCZBrain，由点云构成并连接到一台显示 BNB 冲向 2,000 美元的电脑。" role="img"></canvas>
+<div class="fallback"><img src="assets/brand/greenczbrain-logo-master.png?v=2" data-i18n-alt="characterLogoAlt" alt="GreenCZBrain 角色标志"></div>
 <div id="thoughts" aria-hidden="true"></div>
 
 <header class="nav">
-  <a class="brand" href="#" data-nav="home"><img src="assets/brand/zbrain-logo.png?v=1" data-i18n-alt="brandLogoAlt" alt="ZBRAIN 标志">ZBRAIN</a>
+  <a class="brand" href="#" data-nav="home"><img src="assets/brand/greenczbrain-logo.png?v=2" data-i18n-alt="brandLogoAlt" alt="GreenCZBrain 标志">GreenCZBrain</a>
   <nav class="links" id="links" data-i18n-aria="mainNavAria" aria-label="主导航">
     <a href="#" data-nav="home" aria-current="page" data-i18n="navBrain">大脑</a>
     <a href="#how" data-nav="how" data-i18n="navHow">工作原理</a>
@@ -219,18 +219,14 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="sndWave" d="M16.5 8.5a5 5 0 0 1 0 7" opacity=".25"/></svg>
     <span id="soundLbl">声音：关</span>
   </button>
-  <a class="iconbtn twitter-link" href="https://x.com/zbrainBNB" target="_blank" rel="noopener noreferrer" aria-label="Follow ZBRAIN on X">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
-    <span class="twitter-label">Twitter</span>
-  </a>
-  <a class="btn buy" href="#token" data-nav="token"><span data-i18n="buy">购买</span> <span class="tk">$ZBRAIN</span></a>
+  <a class="btn buy" href="#token" data-nav="token"><span data-i18n="buy">购买</span> <span class="tk">$GREENBRAIN</span></a>
   <button class="iconbtn burger" id="burger" aria-expanded="false" aria-controls="links" data-i18n="menu">菜单</button>
 </header>
 
 <main class="hud" id="hud">
   <div class="intro" id="intro">
     <h1 data-i18n="heroTitle">赵长鹏的大脑，实时运行中。</h1>
-    <p data-i18n="heroBody">我们汇集并浓缩了 CZ 的公开推文，把他的想法、语气与建设者精神重组成 ZBRAIN 中鲜活的数字人格。</p>
+    <p data-i18n="heroBody">我们汇集并浓缩了 CZ 的公开推文，把他的想法、语气与建设者精神重组成 GreenCZBrain 中鲜活的数字人格。</p>
     <div class="row">
       <button class="btn" id="thinkBtn" data-i18n="makeThink">让它思考</button>
       <a class="btn ghost" href="#how" data-nav="how" data-i18n="navHow">工作原理</a>
@@ -275,7 +271,7 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
       <ol class="steps">
         <li data-i18n-html="howStep1"><b>我们映射了公开信号</b>建设者语录、加密行业历史、市场周期，以及与 CZ 公众形象相关的理念。</li>
         <li data-i18n-html="howStep2"><b>我们压缩了噪声</b>只保留最强的信号：构建、学习、适应并持续前进。</li>
-        <li data-i18n-html="howStep3"><b>我们把它变成神经元</b>每个点都是一个微小信号，共同组成动画化的 ZBRAIN 角色。</li>
+        <li data-i18n-html="howStep3"><b>我们把它变成神经元</b>每个点都是一个微小信号，共同组成动画化的 GreenCZBrain 角色。</li>
         <li data-i18n-html="howStep4"><b>我们把它接入电脑</b>然后让它自由行动。它选择了卡通片。</li>
       </ol>
       <div class="row"><button class="btn" id="replayBtn" data-i18n="replayUpload">重新播放上传过程</button></div>
@@ -287,30 +283,30 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
         <li data-i18n="does4">玩儿童游戏，经常失败，还把所有形状都塞进方形孔。</li>
         <li data-i18n="does5">偶尔打开维基百科，读上一段。</li>
       </ul>
-      <p class="fine" data-i18n="disclaimer">ZBRAIN 是受公共文化启发的非关联戏仿模拟，不使用任何私人数据，所有内容均在你的浏览器中运行。</p>
+      <p class="fine" data-i18n="disclaimer">GreenCZBrain 是受公共文化启发的非关联戏仿模拟，不使用任何私人数据，所有内容均在你的浏览器中运行。</p>
     </section>
 
     <section data-page="about">
-      <h2 data-i18n="aboutTitle">认识 ZBRAIN</h2>
-      <img class="portrait" src="assets/brand/zbrain-logo.png?v=1" data-i18n-alt="portraitAlt" alt="ZBRAIN 点云角色">
-      <p data-i18n="aboutP1">ZBRAIN 是对赵长鹏的风格化点云演绎：深色短发、自然的 V 形发际线、矩形眼镜和专注的目光。</p>
+      <h2 data-i18n="aboutTitle">认识 GreenCZBrain</h2>
+      <img class="portrait" src="assets/brand/greenczbrain-logo.png?v=2" data-i18n-alt="portraitAlt" alt="GreenCZBrain 点云角色">
+      <p data-i18n="aboutP1">GreenCZBrain 是对赵长鹏的风格化点云演绎：深色短发、自然的 V 形发际线、矩形眼镜和专注的目光。</p>
       <p data-i18n="aboutP2">它围绕持续执行的理念构建，将公开的加密文化变成一个趣味动画大脑。</p>
-      <p data-i18n-html="aboutP3">于是我们创造了 ZBRAIN。<strong>始终在线。</strong>它在你的浏览器中不断计算、学习和构建。</p>
+      <p data-i18n-html="aboutP3">于是我们创造了 GreenCZBrain。<strong>始终在线。</strong>它在你的浏览器中不断计算、学习和构建。</p>
       <h3 data-i18n="knownFor">标志性特征</h3>
       <ul class="does">
         <li data-i18n="known1">深色短发与一体化 V 形发际线。</li>
         <li data-i18n="known2">纤细的 CZ 风格矩形眼镜。</li>
         <li data-i18n="known3">即使以点云呈现，也保持冷静而略显无聊的目光。</li>
       </ul>
-      <p class="fine" data-i18n="aboutDisclaimer">ZBRAIN 是一个虚构且无关联的戏仿角色。它不是赵长鹏本人，也不使用私人数据。</p>
+      <p class="fine" data-i18n="aboutDisclaimer">GreenCZBrain 是一个虚构且无关联的戏仿角色。它不是赵长鹏本人，也不使用私人数据。</p>
     </section>
 
     <section data-page="token">
-      <h2 data-i18n="tokenTitle">$ZBRAIN 运行于 Robinhood Chain</h2>
-      <p data-i18n="tokenIntro">该代币是 ZBRAIN 实验的钥匙。持有它、传播它，并观察大脑思考。</p>
+      <h2 data-i18n="tokenTitle">$GREENBRAIN 为 BNB Chain 概念项目</h2>
+      <p data-i18n="tokenIntro">当前页面是 GreenCZBrain 的视觉体验。合约尚未公布，所有交易入口保持关闭。</p>
       <dl class="facts">
-        <dt data-i18n="tickerLabel">代号</dt><dd class="tk">$ZBRAIN</dd>
-        <dt data-i18n="chainLabel">链</dt><dd>Robinhood Chain</dd>
+        <dt data-i18n="tickerLabel">代号</dt><dd class="tk">$GREENBRAIN</dd>
+        <dt data-i18n="chainLabel">链</dt><dd>BNB Chain</dd>
         <dt data-i18n="supplyLabel">供应量</dt><dd data-i18n="tba">待公布</dd>
         <dt data-i18n="taxesLabel">税费</dt><dd data-i18n="tba">待公布</dd>
       </dl>
@@ -323,11 +319,11 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
       </div>
       <h3 data-i18n="howBuy">如何购买</h3>
       <ol class="steps">
-        <li data-i18n-html="buyStep1"><b>准备钱包</b>使用任何支持 Robinhood Chain 的钱包。</li>
-        <li data-i18n-html="buyStep2"><b>准备 ETH</b>将 ETH 跨链到 Robinhood Chain。</li>
-        <li data-i18n-html="buyStep3"><b>兑换</b>将合约粘贴到 Robinhood Chain 上的 DEX 并进行兑换。</li>
+        <li data-i18n-html="buyStep1"><b>合约待公布</b>目前没有可验证的代币合约。</li>
+        <li data-i18n-html="buyStep2"><b>官方链接待公布</b>不要相信未经本页面确认的地址。</li>
+        <li data-i18n-html="buyStep3"><b>交易保持关闭</b>只有在真实合约上线后才会启用入口。</li>
       </ol>
-      <p class="fine" data-i18n="tokenDisclaimer">$ZBRAIN 是一个 Meme 代币，不承诺任何事情，包括回报。这个大脑也不作任何承诺。非财务建议。</p>
+      <p class="fine" data-i18n="tokenDisclaimer">该图表是视觉模拟，不是价格预测或财务建议。</p>
     </section>
   </div>
 </aside>
@@ -339,42 +335,42 @@ html[lang="zh-CN"] .feed,html[lang="zh-CN"] .thought{font-family:"Microsoft YaHe
 "use strict";
 /* ===== Edit these before launch ===== */
 const CONFIG = {
-  ticker: "$ZBRAIN",
+  ticker: "$GREENBRAIN",
   contract: "0x0000000000000000000000000000000000000000",
   dexscreener: "https://dexscreener.com/",
-  x: "https://x.com/zbrainBNB"
+  x: ""
 };
 
 const I18N = {
   zh: {
-    loaderTitle: "正在上传 ZBRAIN…", navBrain: "大脑", navHow: "工作原理", navAbout: "关于", navToken: "代币",
+    loaderTitle: "正在上传 GreenCZBrain…", navBrain: "大脑", navHow: "工作原理", navAbout: "关于", navToken: "代币",
     mainNavAria: "主导航", soundAria: "声音", soundOn: "声音：开", soundOff: "声音：关", buy: "购买", menu: "菜单",
-    heroTitle: "赵长鹏的大脑，实时运行中。", heroBody: "我们汇集并浓缩了 CZ 的公开推文，把他的想法、语气与建设者精神重组成 ZBRAIN 中鲜活的数字人格。",
+    heroTitle: "BNB 冲向 $2,000。大脑正在变绿。", heroBody: "观察屏幕上的 BNB 图表不断上涨。触及 $2,000 时，大脑和整个世界会变绿 4 秒，然后重新开始。",
     makeThink: "让它思考", brainMonitor: "大脑监视器", thinking: "思考", cartoonCortex: "卡通皮层", reading: "阅读",
     neuronsScreen: "屏幕神经元", primesFound: "已发现质数", gamesLost: "游戏失败", articlesRead: "已读文章",
-    simulationNote: "在你的浏览器中模拟，数学计算是真实的。", changeChannel: "切换频道", hint: "拖动即可旋转。点击大脑让它思考。",
-    close: "关闭", closeAria: "关闭并返回大脑", sceneAria: "赵长鹏的 ZBRAIN，由点云构成并连接到一台老式电脑。拖动可旋转，点击可让它思考。",
-    characterLogoAlt: "ZBRAIN 角色标志", brandLogoAlt: "ZBRAIN 标志", portraitAlt: "ZBRAIN 点云角色",
+    simulationNote: "浏览器内循环模拟，不代表真实市场价格。", changeChannel: "重播上涨", hint: "拖动旋转。等待 BNB 触及 $2,000。",
+    close: "关闭", closeAria: "关闭并返回大脑", sceneAria: "赵长鹏的 GreenCZBrain，由点云构成并连接到一台老式电脑。拖动可旋转，点击可让它思考。",
+    characterLogoAlt: "GreenCZBrain 角色标志", brandLogoAlt: "GreenCZBrain 标志", portraitAlt: "GreenCZBrain 点云角色",
     howTitle: "我们如何构建这个大脑", howStep1: "<b>我们映射了公开信号</b>建设者语录、加密行业历史、市场周期，以及与 CZ 公众形象相关的理念。",
     howStep2: "<b>我们压缩了噪声</b>只保留最强的信号：构建、学习、适应并持续前进。",
-    howStep3: "<b>我们把它变成神经元</b>每个点都是一个微小信号，共同组成动画化的 ZBRAIN 角色。",
+    howStep3: "<b>我们把它变成神经元</b>每个点都是一个微小信号，共同组成动画化的 GreenCZBrain 角色。",
     howStep4: "<b>我们把它接入电脑</b>然后让它自由行动。它选择了卡通片。", replayUpload: "重新播放上传过程",
     allDayTitle: "这个大脑整天都在做什么", does1: "真的进行算术运算。有时第一次会算错，然后自行修正。", does2: "持续在后台寻找质数，从不停歇。",
     does3: "一遍又一遍地看儿童卡通片。", does4: "玩儿童游戏，经常失败，还把所有形状都塞进方形孔。", does5: "偶尔打开维基百科，读上一段。",
-    disclaimer: "ZBRAIN 是受公共文化启发的非关联戏仿模拟，不使用任何私人数据，所有内容均在你的浏览器中运行。",
-    aboutTitle: "认识 ZBRAIN", aboutP1: "ZBRAIN 是对赵长鹏的风格化点云演绎：深色短发、自然的 V 形发际线、矩形眼镜和专注的目光。",
-    aboutP2: "它围绕持续执行的理念构建，将公开的加密文化变成一个趣味动画大脑。", aboutP3: "于是我们创造了 ZBRAIN。<strong>始终在线。</strong>它在你的浏览器中不断计算、学习和构建。",
+    disclaimer: "GreenCZBrain 是受公共文化启发的非关联戏仿模拟，不使用任何私人数据，所有内容均在你的浏览器中运行。",
+    aboutTitle: "认识 GreenCZBrain", aboutP1: "GreenCZBrain 是对赵长鹏的风格化点云演绎：深色短发、自然的 V 形发际线、矩形眼镜和专注的目光。",
+    aboutP2: "它围绕持续执行的理念构建，将公开的加密文化变成一个趣味动画大脑。", aboutP3: "于是我们创造了 GreenCZBrain。<strong>始终在线。</strong>它在你的浏览器中不断计算、学习和构建。",
     knownFor: "标志性特征", known1: "深色短发与一体化 V 形发际线。", known2: "纤细的 CZ 风格矩形眼镜。", known3: "即使以点云呈现，也保持冷静而略显无聊的目光。",
-    aboutDisclaimer: "ZBRAIN 是一个虚构且无关联的戏仿角色。它不是赵长鹏本人，也不使用私人数据。",
-    tokenTitle: "$ZBRAIN 运行于 Robinhood Chain", tokenIntro: "该代币是 ZBRAIN 实验的钥匙。持有它、传播它，并观察大脑思考。",
+    aboutDisclaimer: "GreenCZBrain 是一个虚构且无关联的戏仿角色。它不是赵长鹏本人，也不使用私人数据。",
+    tokenTitle: "$GREENBRAIN 为 BNB Chain 概念项目", tokenIntro: "当前页面是 GreenCZBrain 的视觉体验。合约尚未公布，所有交易入口保持关闭。",
     tickerLabel: "代号", chainLabel: "链", supplyLabel: "供应量", taxesLabel: "税费", tba: "待公布", contractLabel: "合约", copy: "复制",
     caPlaceholder: "上线前的占位信息。请始终通过官方 X 账号核对合约。", caCheck: "兑换前请务必再次核对合约。", openDex: "打开 DexScreener", followX: "在 X 上关注",
-    howBuy: "如何购买", buyStep1: "<b>准备钱包</b>使用任何支持 Robinhood Chain 的钱包。", buyStep2: "<b>准备 ETH</b>将 ETH 跨链到 Robinhood Chain。",
-    buyStep3: "<b>兑换</b>将合约粘贴到 Robinhood Chain 上的 DEX 并进行兑换。", tokenDisclaimer: "$ZBRAIN 是一个 Meme 代币，不承诺任何事情，包括回报。这个大脑也不作任何承诺。非财务建议。",
+    howBuy: "上线状态", buyStep1: "<b>合约待公布</b>目前没有可验证的代币合约。", buyStep2: "<b>官方链接待公布</b>不要相信未经本页面确认的地址。",
+    buyStep3: "<b>交易保持关闭</b>只有在真实合约上线后才会启用入口。", tokenDisclaimer: "该图表是视觉模拟，不是价格预测或财务建议。",
     contractSoon: "合约即将公布", notLive: "尚未上线", copied: "已复制", selectCopy: "请选择并复制", switchLanguage: "Switch to English",
     latestPrime: "最新", booting: "启动中",
     loaderSteps: [["映射公开信号", "完成"], ["移除重复观点", "剩 1 条"], ["修整短发", "完成"], ["佩戴 CZ 眼镜", "完成"], ["启动卡通皮层", "完成"]],
-    marquee: ["2 + 2 = 4，已确认", "又看了一遍 Blobby", "调整了眼镜", "在 Jump Guy 中失败", "把星星塞进方形孔", "还在思考热狗", "短发：就绪", "$ZBRAIN 运行于 Robinhood Chain", "又找到一个质数", "镜框：完全水平"],
+    marquee: ["BNB 正在上涨", "目标价格：$2,000", "触发绿色大脑模式", "全世界变绿 4 秒", "然后重新开始", "GreenCZBrain 在线", "BNB Chain 主题", "图表为视觉模拟", "不是价格预测", "继续建设"],
     jokes: ["热狗算三明治吗：仍在计算", "π ≈ 3.14159265… 算累了", "检查眼镜是否水平：精准", "吸管有几个孔：1 还是 2", "麦片算汤吗：稍后再议", "斐波那契：1 1 2 3 5 8 13 21 34…"],
     articles: [
       { id: "book", t: "购买我的书", s: "购买我的书。这是一本实用指南，讲述如何穿越每个市场周期、保持专注，并把想法变成产品。", img: "book" },
@@ -384,45 +380,46 @@ const I18N = {
       { id: "sky", t: "天空为什么是蓝色", s: "阳光被空气分子散射，其中蓝光散射最强，因此天空看起来是蓝色的。", img: "sky" }
     ],
     programs: {
+      bnbchart: { lbl: "BNB 模拟", ttl: "BNB / USD → $2,000" },
       cartoon: { lbl: "观看中", ttl: "Blobby，第 4 集：户外" }, sorter: { lbl: "游戏中", ttl: "形状分类器（所有形状都能塞进方形孔）" },
       runner: { lbl: "游戏中", ttl: "跳跃小子" }, wiki: { lbl: "阅读中", ttl: "维基百科" }
     },
     feed: {
       thinking: "思考中…", wait: "等等…", fixed: "✓ 已修正", square: "{shape} → 方形孔。大概正确", lost: "跳跃小子：得分 {score} 后再次失败。",
       wikiOpened: "打开维基百科：“{title}”", reading: "阅读：{title}", cartoonChannel: "频道：卡通片（又来了）", gameOpened: "打开了儿童游戏", requested: "，按你的要求",
-      cartoonsThought: "卡通片！！", gameThought: "游戏时间", hello: "你好？", math: "我会算数学", back: "我回来了", reupload: "正在重新上传 ZBRAIN…",
+      cartoonsThought: "卡通片！！", gameThought: "游戏时间", hello: "你好？", math: "我会算数学", back: "我回来了", reupload: "正在重新上传 GreenCZBrain…",
       startup: ["上传完成", "神经元在线：{count}", "CZ 眼镜：已佩戴", "短发：就绪"], ambient: ["Blobby 向左走了", "太阳为什么在微笑", "数云朵：3", "Blobby 弹了一下。很好。"], gameOver: "又失败了"
     },
-    canvas: { blobbyEpisode: "第 4 集：户外", squareHole: "方形孔！", shapeSorter: "形状分类器", star: "星形", circle: "圆形", triangle: "三角形", gameOver: "游戏结束", score: "得分", best: "最佳", jumpGuy: "跳跃小子", wikiFrom: "来自维基百科，自由的百科全书", buyBook: "购买我的书", byZbrain: "ZBRAIN 著" }
+    canvas: { blobbyEpisode: "第 4 集：户外", squareHole: "方形孔！", shapeSorter: "形状分类器", star: "星形", circle: "圆形", triangle: "三角形", gameOver: "游戏结束", score: "得分", best: "最佳", jumpGuy: "跳跃小子", wikiFrom: "来自维基百科，自由的百科全书", buyBook: "购买我的书", byZbrain: "GreenCZBrain 著" }
   },
   en: {
-    loaderTitle: "Uploading ZBRAIN…", navBrain: "Brain", navHow: "How it works", navAbout: "About", navToken: "Token",
+    loaderTitle: "Uploading GreenCZBrain…", navBrain: "Brain", navHow: "How it works", navAbout: "About", navToken: "Token",
     mainNavAria: "Main", soundAria: "Sound", soundOn: "Sound on", soundOff: "Sound off", buy: "Buy", menu: "Menu",
-    heroTitle: "Changpeng Zhao's brain, running live.", heroBody: "We gathered CZ’s public tweets and rebuilt his ideas, voice and builder mindset as a living persona inside ZBRAIN.",
+    heroTitle: "BNB is running to $2,000. The brain is going green.", heroBody: "Watch the BNB chart climb on the screen. At $2,000, the brain and the whole world turn green for 4 seconds, then the loop begins again.",
     makeThink: "Make it think", brainMonitor: "Brain monitor", thinking: "Thinking", cartoonCortex: "Cartoon cortex", reading: "Reading",
     neuronsScreen: "Neurons on screen", primesFound: "Primes found", gamesLost: "Games lost", articlesRead: "Articles read",
-    simulationNote: "Simulated in your browser. The math is real.", changeChannel: "Change channel", hint: "Drag to spin him. Click his brain to make him think.",
-    close: "Close", closeAria: "Close and go back to the brain", sceneAria: "Changpeng Zhao's ZBRAIN, made of dots and wired to an old computer. Drag to spin it, click it to make it think.",
-    characterLogoAlt: "ZBRAIN character logo", brandLogoAlt: "ZBRAIN logo", portraitAlt: "ZBRAIN point-cloud character",
+    simulationNote: "In-browser loop simulation. Not a live market price.", changeChannel: "Replay pump", hint: "Drag to spin. Wait for BNB to reach $2,000.",
+    close: "Close", closeAria: "Close and go back to the brain", sceneAria: "Changpeng Zhao's GreenCZBrain, made of dots and wired to an old computer. Drag to spin it, click it to make it think.",
+    characterLogoAlt: "GreenCZBrain character logo", brandLogoAlt: "GreenCZBrain logo", portraitAlt: "GreenCZBrain point-cloud character",
     howTitle: "How we made his brain", howStep1: "<b>We mapped the public signal</b>Builder quotes, crypto history, market cycles and the ideas associated with CZ’s public persona.",
     howStep2: "<b>We compressed the noise</b>Only the strongest signals remained: build, learn, adapt and keep moving.",
-    howStep3: "<b>We turned it into neurons</b>Each dot is one tiny signal. Together they form the animated ZBRAIN character.",
+    howStep3: "<b>We turned it into neurons</b>Each dot is one tiny signal. Together they form the animated GreenCZBrain character.",
     howStep4: "<b>We plugged it into a computer</b>Then we let it do whatever it wanted. It chose cartoons.", replayUpload: "Replay the upload",
     allDayTitle: "What the brain does all day", does1: "Does arithmetic, for real. Sometimes gets it wrong first, then fixes it.", does2: "Hunts for prime numbers in the background and never stops.",
     does3: "Watches kids’ cartoons over and over.", does4: "Plays kids’ games. Loses a lot. Puts every shape in the square hole.", does5: "Sometimes opens Wikipedia and reads one paragraph.",
-    disclaimer: "ZBRAIN is an unaffiliated parody simulation inspired by public culture. No private data is used. Everything runs in your browser.",
-    aboutTitle: "Meet ZBRAIN", aboutP1: "ZBRAIN is a stylized point-cloud interpretation of Changpeng Zhao: close-cropped dark hair, a natural V hairline, rectangular glasses and a focused stare.",
-    aboutP2: "Built around the idea of relentless execution, it turns public crypto culture into a playful animated brain.", aboutP3: "So we created ZBRAIN. <strong>Always online.</strong> Always calculating, learning and building inside your browser.",
+    disclaimer: "GreenCZBrain is an unaffiliated parody simulation inspired by public culture. No private data is used. Everything runs in your browser.",
+    aboutTitle: "Meet GreenCZBrain", aboutP1: "GreenCZBrain is a stylized point-cloud interpretation of Changpeng Zhao: close-cropped dark hair, a natural V hairline, rectangular glasses and a focused stare.",
+    aboutP2: "Built around the idea of relentless execution, it turns public crypto culture into a playful animated brain.", aboutP3: "So we created GreenCZBrain. <strong>Always online.</strong> Always calculating, learning and building inside your browser.",
     knownFor: "Known for", known1: "The close-cropped dark hair and integrated V-shaped hairline.", known2: "The thin rectangular CZ-style glasses.", known3: "A calm, slightly bored stare, even in dot form.",
-    aboutDisclaimer: "ZBRAIN is a fictional, unaffiliated parody character. It is not Changpeng Zhao and does not use private data.",
-    tokenTitle: "$ZBRAIN lives on Robinhood Chain", tokenIntro: "The token is the key to the ZBRAIN experiment. Hold it, meme it and watch the brain think.",
+    aboutDisclaimer: "GreenCZBrain is a fictional, unaffiliated parody character. It is not Changpeng Zhao and does not use private data.",
+    tokenTitle: "$GREENBRAIN is a BNB Chain concept", tokenIntro: "This page is the GreenCZBrain visual experience. No contract has been announced and all trading actions remain disabled.",
     tickerLabel: "Ticker", chainLabel: "Chain", supplyLabel: "Supply", taxesLabel: "Taxes", tba: "To be announced", contractLabel: "Contract", copy: "Copy",
     caPlaceholder: "Placeholder until launch. Always check the contract on the official X account.", caCheck: "Always double-check the contract before you swap.", openDex: "Open DexScreener", followX: "Follow on X",
-    howBuy: "How to buy", buyStep1: "<b>Get a wallet</b>Any wallet that supports Robinhood Chain.", buyStep2: "<b>Bring ETH</b>Bridge ETH to Robinhood Chain.",
-    buyStep3: "<b>Swap</b>Paste the contract into a DEX on Robinhood Chain and swap.", tokenDisclaimer: "$ZBRAIN is a meme token. It promises nothing, including returns. The brain doesn’t promise anything either. Not financial advice.",
+    howBuy: "Launch status", buyStep1: "<b>Contract pending</b>There is currently no verified token contract.", buyStep2: "<b>Official links pending</b>Do not trust addresses not confirmed on this page.",
+    buyStep3: "<b>Trading disabled</b>Swap actions will only be enabled after a real contract launches.", tokenDisclaimer: "The chart is a visual simulation, not a price prediction or financial advice.",
     contractSoon: "Contract coming soon", notLive: "Not live yet", copied: "Copied", selectCopy: "Select and copy", switchLanguage: "切换为中文", latestPrime: "latest", booting: "Booting",
     loaderSteps: [["Mapping public signals", "done"], ["Removing duplicate opinions", "1 left"], ["Trimming the buzz cut", "done"], ["Fitting CZ glasses", "done"], ["Booting cartoon cortex", "done"]],
-    marquee: ["2 + 2 = 4, confirmed", "watched Blobby again", "adjusted the glasses", "lost at Jump Guy", "put the star in the square hole", "still thinking about the hot dog", "buzz cut: ready", "$ZBRAIN on Robinhood Chain", "found another prime", "frames: perfectly level"],
+    marquee: ["BNB is climbing", "price target: $2,000", "green brain mode armed", "the whole world turns green for 4 seconds", "then the loop restarts", "GreenCZBrain online", "BNB Chain theme", "chart is simulated", "not a price prediction", "keep building"],
     jokes: ["is a hot dog a sandwich: still computing", "π ≈ 3.14159265… got bored", "checking glasses alignment: exact", "how many holes in a straw: 1 or 2", "is cereal soup: parked for later", "fibonacci: 1 1 2 3 5 8 13 21 34…"],
     articles: [
       { id: "book", t: "Buy My Book", s: "BUY MY BOOK. A practical field guide to building through every market cycle, staying focused and turning ideas into products.", img: "book" },
@@ -431,14 +428,14 @@ const I18N = {
       { id: "candles", t: "Candlestick chart", s: "A candlestick chart shows the open, high, low and close of a price over a period of time.", img: "candles" },
       { id: "sky", t: "Why is the sky blue", s: "Sunlight is scattered by air molecules, and blue light is scattered the most. That is why the sky looks blue.", img: "sky" }
     ],
-    programs: { cartoon: { lbl: "Watching", ttl: "Blobby, episode 4: Outside" }, sorter: { lbl: "Playing", ttl: "Shape Sorter (every shape fits the square hole)" }, runner: { lbl: "Playing", ttl: "Jump Guy" }, wiki: { lbl: "Reading", ttl: "Wikipedia" } },
+    programs: { bnbchart: { lbl: "BNB simulation", ttl: "BNB / USD → $2,000" }, cartoon: { lbl: "Watching", ttl: "Blobby, episode 4: Outside" }, sorter: { lbl: "Playing", ttl: "Shape Sorter (every shape fits the square hole)" }, runner: { lbl: "Playing", ttl: "Jump Guy" }, wiki: { lbl: "Reading", ttl: "Wikipedia" } },
     feed: {
       thinking: "thinking…", wait: "wait…", fixed: "✓ fixed it", square: "{shape} → square hole. correct, probably", lost: "jump guy: lost at {score}. again.",
       wikiOpened: "opened wikipedia: “{title}”", reading: "reading: {title}", cartoonChannel: "channel: cartoons (again)", gameOpened: "opened a kids game", requested: ", as requested",
-      cartoonsThought: "cartoons!!", gameThought: "game time", hello: "hello?", math: "i can do math", back: "i’m back", reupload: "re-uploading ZBRAIN…",
+      cartoonsThought: "cartoons!!", gameThought: "game time", hello: "hello?", math: "i can do math", back: "i’m back", reupload: "re-uploading GreenCZBrain…",
       startup: ["upload complete", "neurons online: {count}", "CZ glasses: fitted", "buzz cut: ready"], ambient: ["blobby went left", "why is the sun smiling", "counting clouds: 3", "blobby bounced. good."], gameOver: "game over again"
     },
-    canvas: { blobbyEpisode: "episode 4: outside", squareHole: "SQUARE HOLE!", shapeSorter: "SHAPE SORTER", star: "star", circle: "circle", triangle: "triangle", gameOver: "GAME OVER", score: "score", best: "best", jumpGuy: "JUMP GUY", wikiFrom: "From Wikipedia, the free encyclopedia", buyBook: "BUY MY BOOK", byZbrain: "BY ZBRAIN" }
+    canvas: { blobbyEpisode: "episode 4: outside", squareHole: "SQUARE HOLE!", shapeSorter: "SHAPE SORTER", star: "star", circle: "circle", triangle: "triangle", gameOver: "GAME OVER", score: "score", best: "best", jumpGuy: "JUMP GUY", wikiFrom: "From Wikipedia, the free encyclopedia", buyBook: "BUY MY BOOK", byZbrain: "BY GreenCZBrain" }
   }
 };
 
@@ -484,7 +481,8 @@ function renderContractState() {
   $("#caNote").textContent = isPlaceholderCA ? localized().caPlaceholder : localized().caCheck;
   $("#copyCa").textContent = localized().copy;
 }
-$("#dexLink").href = CONFIG.dexscreener; $("#xLink").href = CONFIG.x;
+$("#dexLink").hidden = true;
+$("#xLink").hidden = true;
 $("#copyCa").addEventListener("click", async () => {
   const b = $("#copyCa");
   if (isPlaceholderCA) { b.textContent = localized().notLive; setTimeout(() => b.textContent = localized().copy, 1600); return; }
@@ -495,7 +493,7 @@ $("#copyCa").addEventListener("click", async () => {
 
 /* ---- marquee ---- */
 function renderMarquee() {
-  const mHtml = localized().marquee.map(t => `<span>${t.replace("$ZBRAIN", CONFIG.ticker)}</span><i>●</i>`).join("");
+  const mHtml = localized().marquee.map(t => `<span>${t.replace("$GreenCZBrain", CONFIG.ticker)}</span><i>●</i>`).join("");
   $("#track").innerHTML = mHtml + mHtml;
 }
 
@@ -561,7 +559,7 @@ const C = h => new THREE.Color(h);
 const lerpC = (a, b, t) => a.clone().lerp(b, t);
 
 const COL = {
-  pink: C("#FF7EB6"), pinkHi: C("#FFB8DA"), mag: C("#B23C9F"), magD: C("#7D2690"), white: C("#FFFFFF"),
+  pink: C("#F3BA2F"), pinkHi: C("#FFE27A"), mag: C("#F59E0B"), magD: C("#B86200"), white: C("#FFFFFF"),
   gold: C("#FFD23F"), goldD: C("#E39B12"), goldHi: C("#FFF3B0"),
   orange: C("#FF8A2A"), orangeHi: C("#FFC07A"), orangeD: C("#DD5A16"),
   cream: C("#FFF3B0"), creamD: C("#D8C27A"), mint: C("#3DE08A"),
@@ -591,7 +589,7 @@ class PB {
 
 const VERT = `
 attribute vec3 aScatter; attribute vec3 aColor; attribute float aSeed; attribute float aDelay; attribute float aSize; attribute float aRegion;
-uniform float uTime, uAssemble, uPR, uScale, uPAT, uPBT, uAct, uTwitch, uSway;
+uniform float uTime, uAssemble, uPR, uScale, uPAT, uPBT, uAct, uTwitch, uSway, uGreen;
 uniform vec3 uPA, uPB;
 varying vec3 vColor;
 float wave(vec3 p, vec3 o, float t0){
@@ -617,7 +615,8 @@ void main(){
   float rnd = fract(sin(aSeed * 127.1 + tick * 311.7) * 43758.5453);
   float tw = step(0.985 - uAct * 0.05, rnd) * isBrain;
   float boost = clamp(wv + tw * 0.8, 0.0, 1.0);
-  vColor = mix(aColor, vec3(1.0), boost * 0.85);
+  vec3 rushColor = mix(aColor, vec3(0.08, 0.95, 0.34), uGreen * 0.94);
+  vColor = mix(rushColor, vec3(1.0), boost * 0.85);
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   gl_Position = projectionMatrix * mv;
   gl_PointSize = aSize * uPR * uScale * (1.0 + boost * 0.8 + (1.0 - st) * 0.5) / -mv.z;
@@ -631,7 +630,7 @@ function makeMat() {
     uniforms: {
       uTime: { value: 0 }, uAssemble: { value: 0 }, uPR: { value: DPR }, uScale: { value: 7 },
       uPA: { value: new THREE.Vector3(0, 9, 0) }, uPAT: { value: -99 }, uPB: { value: new THREE.Vector3(0, 9, 0) }, uPBT: { value: -99 },
-      uAct: { value: 0.3 }, uTwitch: { value: 0 }, uSway: { value: 1 }
+      uAct: { value: 0.3 }, uTwitch: { value: 0 }, uSway: { value: 1 }, uGreen: { value: 0 }
     }
   });
 }
@@ -758,7 +757,9 @@ function shapeCzHairline(geometry) {
   p.needsUpdate = true;
   geometry.computeVertexNormals();
 }
-const brainCore = coreMat(0x8A2B97);
+const brainBaseCoreColor = new THREE.Color(0xD58B00);
+const brainGreenColor = new THREE.Color(0x14E96A);
+const brainCore = coreMat(brainBaseCoreColor.getHex());
 const hairCore = coreMat(0x171717);
 const glassesCore = coreMat(0x171717);
 const eyeCore = coreMat(0x050505);
@@ -850,6 +851,9 @@ const compGroup = new THREE.Group(); compGroup.add(compPts);
 // screen with canvas texture
 const sc = document.createElement("canvas"); sc.width = 480; sc.height = 360;
 const sx = sc.getContext("2d");
+const finalGreenImage = new Image();
+finalGreenImage.decoding = "async";
+finalGreenImage.src = "assets/brand/green-rush-screen.png?v=1";
 const scrTex = new THREE.CanvasTexture(sc); scrTex.minFilter = THREE.LinearFilter;
 const screenMat = new THREE.MeshBasicMaterial({ map: scrTex, transparent: true, opacity: 0 });
 const screen = new THREE.Mesh(new THREE.PlaneGeometry(SCR.w, SCR.h), screenMat);
@@ -1215,7 +1219,7 @@ const Wiki = {
   pic(x, y) {
     const k = this.article().img;
     if (k === "book") {
-      // ZBRAIN book cover replaces the former facial-hair article thumbnail.
+      // GreenCZBrain book cover replaces the former facial-hair article thumbnail.
       G.fillStyle = "#1B26A6"; G.fillRect(x - 47, y - 58, 94, 116);
       G.fillStyle = "#FF7EB6"; G.fillRect(x - 39, y - 58, 86, 116);
       G.fillStyle = "#FFD23F"; G.fillRect(x - 39, y - 58, 7, 116); G.strokeStyle = "#FFD23F"; G.lineWidth = 3; G.strokeRect(x - 39, y - 58, 86, 116);
@@ -1233,7 +1237,96 @@ const Wiki = {
   }
 };
 
-const PROGRAMS = [Cartoon, Sorter, Runner, Wiki];
+let greenRushActive = false;
+let greenRushMix = 0;
+function setGreenRush(active) {
+  if (greenRushActive === active) return;
+  greenRushActive = active;
+  document.body.classList.toggle("green-rush", active);
+  if (active) {
+    brainWave("A", new THREE.Vector3(0, 0.45, 0.85));
+    brainWave("B", new THREE.Vector3(0.5, -0.15, 0.65));
+    thoughtBubble("BNB $2,000!", "mint");
+    feedLine(`<span class="ok">${currentLanguage === "zh" ? "BNB 触及 $2,000 — 全部变绿 4 秒" : "BNB reached $2,000 — full green for 4 seconds"}</span>`);
+    sendPulse(-1, COL.mint);
+    blip(1040, 0.18, "sine", 0.05);
+  }
+}
+
+const BNBChart = {
+  id: "bnbchart", kind: "chart", dur: 999999,
+  start() { this.t = 0; setGreenRush(false); },
+  draw(dt) {
+    this.t = (this.t + dt) % 14;
+    const phase = this.t;
+    const rising = phase < 8;
+    const green = phase >= 8 && phase < 12;
+    const progress = rising ? Math.min(1, phase / 8) : 1;
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const resetFade = phase >= 12 ? Math.max(0, 1 - (phase - 12) / 2) : 1;
+    const price = Math.round(520 + 1480 * eased);
+    setGreenRush(green);
+
+    const bg = green ? "#063F22" : "#11100C";
+    G.fillStyle = bg; G.fillRect(0, 0, 480, 360);
+    if (green && finalGreenImage.complete && finalGreenImage.naturalWidth) {
+      const fit = Math.min(480 / finalGreenImage.naturalWidth, 360 / finalGreenImage.naturalHeight);
+      const dw = finalGreenImage.naturalWidth * fit;
+      const dh = finalGreenImage.naturalHeight * fit;
+      const dx = (480 - dw) / 2;
+      const dy = (360 - dh) / 2;
+      G.drawImage(finalGreenImage, dx, dy, dw, dh);
+      return;
+    }
+    const glow = G.createLinearGradient(0, 0, 480, 360);
+    glow.addColorStop(0, green ? "rgba(39,242,108,.24)" : "rgba(243,186,47,.18)");
+    glow.addColorStop(1, "rgba(0,0,0,0)");
+    G.fillStyle = glow; G.fillRect(0, 0, 480, 360);
+
+    G.strokeStyle = green ? "rgba(184,255,201,.16)" : "rgba(255,214,90,.13)";
+    G.lineWidth = 1;
+    for (let x = 52; x <= 450; x += 66) { G.beginPath(); G.moveTo(x, 60); G.lineTo(x, 316); G.stroke(); }
+    for (let y = 76; y <= 316; y += 48) { G.beginPath(); G.moveTo(52, y); G.lineTo(450, y); G.stroke(); }
+
+    G.fillStyle = green ? "#B8FFC9" : "#F3BA2F";
+    G.font = "800 22px 'Bricolage Grotesque', Arial"; G.fillText("BNB / USD", 22, 34);
+    G.font = "700 13px 'JetBrains Mono', monospace"; G.fillStyle = green ? "#74FF9D" : "#FFF2A8";
+    G.fillText("SIMULATED PUMP", 350, 32);
+
+    const points = [];
+    const visible = Math.max(1, Math.floor(60 * progress));
+    for (let i = 0; i <= visible; i++) {
+      const q = i / 60;
+      const climb = 1 - Math.pow(1 - q, 2.65);
+      const noise = Math.sin(i * 1.73) * 0.035 + Math.sin(i * 0.47) * 0.02;
+      const value = Math.min(1, Math.max(0, climb + noise * (1 - q)));
+      points.push([52 + q * 398, 308 - value * 224]);
+    }
+    if (!rising) points.push([450, 84]);
+
+    G.save(); G.globalAlpha = resetFade;
+    const area = G.createLinearGradient(0, 84, 0, 316);
+    area.addColorStop(0, green ? "rgba(39,242,108,.52)" : "rgba(243,186,47,.44)");
+    area.addColorStop(1, "rgba(243,186,47,0)");
+    G.beginPath(); G.moveTo(points[0][0], 316);
+    points.forEach(p => G.lineTo(p[0], p[1]));
+    G.lineTo(points[points.length - 1][0], 316); G.closePath(); G.fillStyle = area; G.fill();
+    G.beginPath(); points.forEach((p, i) => i ? G.lineTo(p[0], p[1]) : G.moveTo(p[0], p[1]));
+    G.strokeStyle = green ? "#39FF78" : "#FFD65A"; G.lineWidth = 6; G.lineJoin = "round"; G.lineCap = "round"; G.stroke();
+    const last = points[points.length - 1];
+    G.fillStyle = "#fff"; G.beginPath(); G.arc(last[0], last[1], green ? 8 : 6, 0, Math.PI * 2); G.fill();
+    G.restore();
+
+    G.fillStyle = green ? "#39FF78" : "#FFFFFF";
+    G.font = "800 48px 'Bricolage Grotesque', Arial";
+    G.fillText(`$${(green ? 2000 : price).toLocaleString("en-US")}`, 22, 346);
+    G.font = "700 13px 'JetBrains Mono', monospace";
+    G.fillStyle = green ? "#B8FFC9" : "#F3BA2F";
+    G.fillText(green ? (currentLanguage === "zh" ? "大脑绿色模式 · 4 秒" : "BRAIN GREEN MODE · 4 SEC") : (currentLanguage === "zh" ? "目标：$2,000" : "TARGET: $2,000"), 292, 342);
+  }
+};
+
+const PROGRAMS = [BNBChart];
 let prog = null, progT = 0, switching = 0, screenOn = 0;
 function setNP(l, t) { $("#npLbl").textContent = l; $("#npTtl").textContent = t; }
 function programText(program) { return localized().programs[program.id]; }
@@ -1254,18 +1347,18 @@ function refreshLocalizedRuntime() {
     localized().feed.startup.forEach(line => feedLine(`<span class="ctx">${fillTemplate(line, { count: $("#sNeurons").textContent })}</span>`));
   }
 }
-function pickProgram() {
-  let p; do { const r = Math.random(); p = r < 0.34 ? Cartoon : r < 0.6 ? Sorter : r < 0.86 ? Runner : Wiki; } while (p === prog);
-  return p;
-}
+function pickProgram() { return BNBChart; }
 function runProgram(p, reason) {
   switching = 0.45; staticNoise();
   setTimeout(() => {
     prog = p; progT = 0; prog.start();
     if (prog !== Wiki) { const text = programText(prog); setNP(text.lbl, text.ttl); }
-    const ctx = { cartoon: localized().feed.cartoonChannel, game: localized().feed.gameOpened, wiki: "" }[prog.kind];
-    if (ctx) { feedLine(`<span class="ctx">${ctx}${reason === "user" ? localized().feed.requested : ""}</span>`); thoughtBubble(prog.kind === "cartoon" ? localized().feed.cartoonsThought : localized().feed.gameThought, "gold"); }
-    const m = { cartoon: [28, 96, 3], game: [72, 35, 2], wiki: [55, 12, 90] }[prog.kind];
+    const ctx = { chart: currentLanguage === "zh" ? "BNB 图表重新开始上涨" : "BNB chart restarted", cartoon: localized().feed.cartoonChannel, game: localized().feed.gameOpened, wiki: "" }[prog.kind];
+    if (ctx) {
+      feedLine(`<span class="ctx">${ctx}${reason === "user" ? localized().feed.requested : ""}</span>`);
+      thoughtBubble(prog.kind === "chart" ? "BNB → $2,000" : prog.kind === "cartoon" ? localized().feed.cartoonsThought : localized().feed.gameThought, "gold");
+    }
+    const m = { chart: [92, 8, 18], cartoon: [28, 96, 3], game: [72, 35, 2], wiki: [55, 12, 90] }[prog.kind];
     meters.think = m[0]; meters.cartoon = m[1]; meters.read = m[2]; setMeters();
     headMat.uniforms.uAct.value = prog.kind === "game" ? 0.9 : prog.kind === "wiki" ? 0.6 : 0.25;
   }, 450);
@@ -1418,7 +1511,7 @@ function start() {
       .to(".monitor", { autoAlpha: 1, duration: 0.5 }, 2.6)
       .to(".nowplaying", { autoAlpha: 1, duration: 0.5 }, 3.2);
   }
-  setTimeout(() => runProgram(Cartoon), REDUCED ? 0 : 3900);
+  setTimeout(() => runProgram(BNBChart), REDUCED ? 0 : 3900);
   setMeters();
   route();
 }
@@ -1454,6 +1547,9 @@ function frame() {
   if (!REDUCED) brainGroup.position.y += (brainBaseY + Math.sin(time * 0.8) * 0.04 - brainGroup.position.y) * 0.1;
   headMat.uniforms.uSway.value = REDUCED ? 0 : 1;
   const ca = Math.min(1, Math.max(0, (headMat.uniforms.uAssemble.value - 0.82) / 0.18));
+  greenRushMix += ((greenRushActive ? 1 : 0) - greenRushMix) * Math.min(1, dt * 4.5);
+  headMat.uniforms.uGreen.value = greenRushMix;
+  brainCore.color.copy(brainBaseCoreColor).lerp(brainGreenColor, greenRushMix);
   coreMats.forEach(m => m.opacity = ca * (m.userData.maxOpacity || 1));
   updateCable(time);
   cableGeo.setDrawRange(0, Math.floor(CABLE_N * cableReveal));

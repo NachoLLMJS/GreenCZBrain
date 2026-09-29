@@ -28,6 +28,7 @@ class CzAvatarContractTests(unittest.TestCase):
         self.assertIn("buzz cut: ready", HTML)
 
     def test_avatar_keeps_point_cloud_and_solid_cores_in_sync(self):
+        self.assertIn("const brainBaseCoreColor = new THREE.Color(0xD58B00)", AVATAR)
         self.assertIn("const hairCore = coreMat(0x171717)", AVATAR)
         self.assertIn("const glassesCore = coreMat(0x171717)", AVATAR)
         self.assertIn("brainGroup.add(glassesCoreGroup)", AVATAR)

@@ -1,6 +1,6 @@
-# ZBRAIN — local editable project
+# GreenCZBrain — BNB $2,000 green-rush simulation
 
-The untouched source reference is preserved in `reference-original.html`.
+This project is a separate rebrand of the preserved ZBRAIN reference. The untouched source reference remains in `reference-original.html`.
 
 ## Open locally
 
@@ -16,8 +16,8 @@ http://127.0.0.1:4175/
 
 ## Files
 
-- `index.html` — active ZBRAIN experience with inline CSS, JavaScript and the Three.js scene.
-- `assets/brand/` — generated ZBRAIN character logo, web icon and favicon.
+- `index.html` — active GreenCZBrain experience with the looping BNB chart and Three.js green-rush scene.
+- `assets/brand/` — GreenCZBrain logo, web icon and favicon in a green/BNB-yellow palette.
 - `reference-original.html` — untouched downloaded reference; keep it for exact comparisons.
 - `editable/overrides.css` — safest place for initial visual changes.
 - `assets/vendor/` — local copies of Three.js, GSAP, and the web fonts, so the visual experience does not depend on those CDNs.
@@ -25,4 +25,4 @@ http://127.0.0.1:4175/
 
 ## Important
 
-This is a preserved public compiled/static frontend, not the original component repository. It is nevertheless directly editable because the whole deployed experience is contained in `index.html`.
+The BNB chart is an explicit visual simulation, not a live price feed or price prediction. The loop rises to $2,000, turns the brain and background green for four seconds, and resets.
